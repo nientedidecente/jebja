@@ -1,0 +1,3 @@
+base.hxml
+-js web/game.js
+-debug

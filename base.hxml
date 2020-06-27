@@ -1,0 +1,6 @@
+# https://haxe.org/manual/compiler-usage-flags.html
+-lib heaps
+-lib differ
+# class path
+-cp src
+-main Game
