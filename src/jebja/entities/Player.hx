@@ -13,7 +13,8 @@ import h2d.Tile;
 import differ.shapes.Circle;
 
 class Player extends Collidable {
-	static final TRAIL_LIFE = 300;
+	static final TRAIL_DELAY = 350;
+	static final TRAIL_LIFE = 1500;
 	static final ACCELLERATION = 1;
 	static final ROTATION_SPEED = 0.02;
 	static final SIZE = 30;
@@ -35,22 +36,22 @@ class Player extends Collidable {
 		t = new h2d.Text(hxd.res.DefaultFont.get(), parent);
 	}
 
-	function generateTrace() {
+	function generateTrace(x, y) {
 		var particles = new Particles(this.parent);
 		var g = new ParticleGroup(particles);
 		g.texture = Tile.fromColor(Colours.TRAIL).getTexture();
-		g.size = SIZE / 4;
-		g.nparts = 40;
+		g.size = 3;
+		g.nparts = 10;
 		g.sizeRand = .2;
-		g.life = .5;
-		g.speed = 30;
+		g.life = .3;
+		g.speed = 5;
 		g.speedRand = 3;
 		g.emitMode = PartEmitMode.Point;
 		g.emitDist = 10;
 		g.fadeIn = 0;
-		g.fadeOut = 0;
-		particles.x = this.x + 10;
-		particles.y = this.y + 30;
+		g.fadeOut = 0.9;
+		particles.x = x;
+		particles.y = y;
 		particles.addGroup(g);
 		Timer.delay(function() {
 			particles.removeGroup(g);
@@ -77,13 +78,19 @@ class Player extends Collidable {
 
 		this.movement.x = Math.cos((-Math.PI / 2) + this.rotation);
 		this.movement.y = Math.sin((-Math.PI / 2) + this.rotation);
-		this.movement.normalize();
+		#if debug
 		this.printDirection();
+		#end
+		this.movement.normalize();
 		this.x += this.movement.x * this.speed * dt;
 		this.y += this.movement.y * this.speed * dt;
 
 		if (this.movement.x != 0 || this.movement.y != 0) {
-			this.generateTrace();
+			var x = this.x;
+			var y = this.y;
+			Timer.delay(function() {
+				this.generateTrace(x, y);
+			}, TRAIL_DELAY);
 		}
 	}
 
