@@ -1,5 +1,7 @@
 package jebja.entities;
 
+import jebja.libs.Camera;
+import h2d.Text;
 import hxd.Res;
 import h2d.Object;
 import jebja.config.Colours;
@@ -16,6 +18,8 @@ class Player extends Collidable {
 	static final ROTATION_SPEED = 0.02;
 	static final SIZE = 30;
 
+	var t:Text;
+
 	var speed:Int;
 	var particles:Particles;
 	var g:ParticleGroup;
@@ -25,8 +29,10 @@ class Player extends Collidable {
 		var tile = Res.boat.toTile();
 		tile = tile.center();
 		super(parent, tile);
-		this.speed = 300;
+		this.speed = 100;
 		this.collider = new Circle(this.x, this.y, tile.width * .5);
+		this.rotation = -Math.PI / 2;
+		t = new h2d.Text(hxd.res.DefaultFont.get(), parent);
 	}
 
 	function generateTrace() {
@@ -43,11 +49,12 @@ class Player extends Collidable {
 		g.emitDist = 10;
 		g.fadeIn = 0;
 		g.fadeOut = 0;
-		particles.x = this.x + 5;
+		particles.x = this.x + 10;
 		particles.y = this.y + 30;
 		particles.addGroup(g);
 		Timer.delay(function() {
 			particles.removeGroup(g);
+			particles.remove();
 		}, TRAIL_LIFE);
 	}
 
@@ -55,36 +62,34 @@ class Player extends Collidable {
 		super.update(dt);
 
 		if (Key.isDown(Key.RIGHT)) {
-			this.movement.x = ACCELLERATION;
 			this.rotation += ROTATION_SPEED;
 		}
 		if (Key.isDown(Key.LEFT)) {
-			this.movement.x = -ACCELLERATION;
 			this.rotation -= ROTATION_SPEED;
 		}
 
-		if (Key.isDown(Key.UP)) {
-			this.movement.y = -ACCELLERATION;
-		}
-
-		if (Key.isDown(Key.DOWN)) {
-			this.movement.y = ACCELLERATION;
-		}
-
+		// stopping for debug purposes
 		if (Key.isDown(Key.SPACE)) {
 			this.movement.y = 0;
 			this.movement.x = 0;
-			this.rotation = 0;
+			this.rotation = Math.PI;
 		}
 
-		this.movement.x = 0;
-		this.movement.y = 0;
-
+		this.movement.x = Math.cos((-Math.PI / 2) + this.rotation);
+		this.movement.y = Math.sin((-Math.PI / 2) + this.rotation);
 		this.movement.normalize();
+		this.printDirection();
 		this.x += this.movement.x * this.speed * dt;
 		this.y += this.movement.y * this.speed * dt;
+
 		if (this.movement.x != 0 || this.movement.y != 0) {
 			this.generateTrace();
 		}
+	}
+
+	function printDirection() {
+		t.text = 'x: ${this.movement.x}\ny: ${this.movement.y}\nrot: ${this.rotation}';
+		t.x = this.x - 200;
+		t.y = this.y - 100;
 	}
 }

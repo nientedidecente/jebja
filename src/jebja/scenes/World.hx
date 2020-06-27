@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import hxd.Timer;
 import h2d.Camera;
 import jebja.entities.Buoy;
 import jebja.config.Colours;
@@ -33,6 +34,7 @@ class World extends BaseScene {
 	}
 
 	override function update(dt:Float) {
+		trace(Timer.fps());
 		if (gameOver) {
 			return;
 		}
