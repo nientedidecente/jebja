@@ -2,6 +2,10 @@
 
 simple sailing boat simulator in Haxe/Heaps
 
+[hosted web master](https://jebja.surge.sh/)
+
+[VideoExample](https://www.loom.com/share/6642bafefdb5445abb9ae9ae8ff101fc)
+
 ## How to Run
 Prerequisites:
 - [Haxe](https://haxe.org/download/) installed (used version 4.1.2 while developing).
