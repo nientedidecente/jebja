@@ -1,13 +1,13 @@
 package tests;
 
-import tests.cases.ExampleTest;
+import tests.cases.*;
 import utest.Runner;
 import utest.ui.Report;
 import utest.TestResult;
 
 class TestSuite {
 	public static function addTests(runner:Runner) {
-		runner.addCase(new tests.cases.ExampleTest());
+		runner.addCase(new GeomHelperTest());
 	}
 
 	public static function main() {

@@ -1,4 +1,6 @@
+hxml/common.hxml
 -lib utest
+-cp src
 -cp tests
 -main tests.TestSuite
 -D utest

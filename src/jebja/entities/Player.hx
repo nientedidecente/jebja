@@ -18,7 +18,7 @@ class Player extends Collidable {
 	static final ACCELLERATION = 1;
 	static final ROTATION_SPEED = 0.02;
 	static final SIZE = 30;
-	static final WIND_DIRECTION = -Math.PI / 2;
+	static final WIND_DIRECTION = Geom.ANGLE_180;
 
 	var t:Text;
 
@@ -96,17 +96,17 @@ class Player extends Collidable {
 	}
 
 	function printDirection() {
-		t.text = 'x: ${this.movement.x}\n' 
-		+ 'y: ${this.movement.y}\n' 
-		+ 'rot: ${this.rotation}\n' 
-		+ 'bearing: ${this.getBearing()}\n'
-		+ 'angle:${Geom.directionAngle(this.rotation)}';
-		t.x = this.x - 400;
-		t.y = this.y - 100;
+		t.text = 'x: ${this.movement.x}\n'
+			+ 'y: ${this.movement.y}\n'
+			+ 'rot: ${this.rotation}\n'
+			+ 'angle:${Geom.directionAngle(this.rotation)}\n'
+			+ 'relative-angle:${this.getRelativeAngle()}\n'
+			+ 'speed-modifier:${Geom.speedModifierFromAngle(this.getRelativeAngle())}\n';
+		t.x = this.x - 300;
+		t.y = this.y - 300;
 	}
 
-	function getBearing() {
-		var diff = Math.abs((this.rotation % 2 * Math.PI) - WIND_DIRECTION);
-		return diff < Math.PI ? diff : 2 * Math.PI - diff;
+	function getRelativeAngle() {
+		return Geom.ANGLE_180 - WIND_DIRECTION - Geom.directionAngle(this.rotation);
 	}
 }
