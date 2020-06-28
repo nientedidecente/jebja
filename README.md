@@ -9,19 +9,19 @@ Prerequisites:
 
 To install dependencies
 ```
-haxelib install js.hxml // deps for js
-haxelib install hl.hxml // deps for hashlink
+haxelib install hxml/js.hxml // deps for js
+haxelib install hxml/hl.hxml // deps for hashlink
 ```
 
 **Build**
 
 **Hashlink**
 
-To build it as **hashlink-sdl** target: `haxe hl.hxml`
+To build it as **hashlink-sdl** target: `haxe hxml/hl.hxml`
 This will generate `build/game.hl` that will be runnable with `hl build/game.hl`
 
 **Web/JS**
 
-To build it as **web/js** target: `haxe js.hxml`
+To build it as **web/js** target: `haxe hxml/js.hxml`
 This will generate `web/game.js` that will be runnable by opening the `web/index.html` with a browser.
 

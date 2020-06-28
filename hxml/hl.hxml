@@ -1,4 +1,4 @@
-base.hxml
+hxml/base.hxml
 -lib hlsdl
 -D windowSize=1090x768
 -D windowFixed=1

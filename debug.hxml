@@ -1,4 +1,0 @@
-hl.hxml
--D debug
--D trackfps
-#-cmd hl build/game.hl
