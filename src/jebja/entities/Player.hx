@@ -83,10 +83,11 @@ class Player extends Collidable {
 		this.printDirection();
 		#end
 		this.movement.normalize();
-		this.x += this.movement.x * this.speed * dt;
-		this.y += this.movement.y * this.speed * dt;
+		var modifiedSpeed = this.speed * this.getSpeedModifier();
+		this.x += this.movement.x * modifiedSpeed * dt;
+		this.y += this.movement.y * modifiedSpeed * dt;
 
-		if (this.movement.x != 0 || this.movement.y != 0) {
+		if (modifiedSpeed > 10) {
 			var x = this.x;
 			var y = this.y;
 			Timer.delay(function() {
@@ -96,17 +97,17 @@ class Player extends Collidable {
 	}
 
 	function printDirection() {
-		t.text = 'x: ${this.movement.x}\n'
-			+ 'y: ${this.movement.y}\n'
-			+ 'rot: ${this.rotation}\n'
-			+ 'angle:${Geom.directionAngle(this.rotation)}\n'
-			+ 'relative-angle:${this.getRelativeAngle()}\n'
-			+ 'speed-modifier:${Geom.speedModifierFromAngle(this.getRelativeAngle())}\n';
+		t.text = 'x: ${this.movement.x}\n' + 'y: ${this.movement.y}\n' + 'rot: ${this.rotation}\n' + 'angle:${Geom.directionAngle(this.rotation)}\n'
+			+ 'relative-angle:${this.getRelativeAngle()}\n' + 'speed-modifier:${this.getSpeedModifier()}\n';
 		t.x = this.x - 300;
 		t.y = this.y - 300;
 	}
 
 	function getRelativeAngle() {
-		return Geom.ANGLE_180 - WIND_DIRECTION - Geom.directionAngle(this.rotation);
+		return (Geom.ANGLE_180 - WIND_DIRECTION - Geom.directionAngle(this.rotation));
+	}
+
+	function getSpeedModifier() {
+		return Geom.speedModifierFromAngle(this.getRelativeAngle());
 	}
 }

@@ -30,9 +30,13 @@ class GeomHelperTest extends Test {
 
 	public function testSpeedModifiers() {
 		Assert.equals(0, Geom.speedModifierFromAngle(0));
-		Assert.equals(1, Geom.speedModifierFromAngle(45));
-		Assert.equals(.5, Geom.speedModifierFromAngle(90));
-		Assert.equals(1, Geom.speedModifierFromAngle(135));
-		Assert.equals(2, Geom.speedModifierFromAngle(180));
+		Assert.equals(1, Geom.speedModifierFromAngle(Geom.ANGLE_45));
+		Assert.equals(.5, Geom.speedModifierFromAngle(Geom.ANGLE_90));
+		Assert.equals(1, Geom.speedModifierFromAngle(Geom.ANGLE_135));
+		Assert.equals(2, Geom.speedModifierFromAngle(Geom.ANGLE_180));
+		Assert.equals(1, Geom.speedModifierFromAngle(Geom.ANGLE_225));
+		Assert.equals(.5, Geom.speedModifierFromAngle(Geom.ANGLE_270));
+		Assert.equals(1, Geom.speedModifierFromAngle(Geom.ANGLE_315));
+		Assert.equals(0, Geom.speedModifierFromAngle(Geom.ANGLE_360));
 	}
 }
