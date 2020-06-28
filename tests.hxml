@@ -1,0 +1,6 @@
+-lib utest
+-cp tests
+-main tests.TestSuite
+-D utest
+-dce full
+--interp
