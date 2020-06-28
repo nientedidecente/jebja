@@ -1,6 +1,6 @@
 package jebja.entities;
 
-import jebja.libs.Camera;
+import jebja.libs.Geom;
 import h2d.Text;
 import hxd.Res;
 import h2d.Object;
@@ -18,6 +18,7 @@ class Player extends Collidable {
 	static final ACCELLERATION = 1;
 	static final ROTATION_SPEED = 0.02;
 	static final SIZE = 30;
+	static final WIND_DIRECTION = -Math.PI / 2;
 
 	var t:Text;
 
@@ -95,8 +96,17 @@ class Player extends Collidable {
 	}
 
 	function printDirection() {
-		t.text = 'x: ${this.movement.x}\ny: ${this.movement.y}\nrot: ${this.rotation}';
-		t.x = this.x - 200;
+		t.text = 'x: ${this.movement.x}\n' 
+		+ 'y: ${this.movement.y}\n' 
+		+ 'rot: ${this.rotation}\n' 
+		+ 'bearing: ${this.getBearing()}\n'
+		+ 'angle:${Geom.directionAngle(this.rotation)}';
+		t.x = this.x - 400;
 		t.y = this.y - 100;
+	}
+
+	function getBearing() {
+		var diff = Math.abs((this.rotation % 2 * Math.PI) - WIND_DIRECTION);
+		return diff < Math.PI ? diff : 2 * Math.PI - diff;
 	}
 }
