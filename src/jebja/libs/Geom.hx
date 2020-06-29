@@ -3,7 +3,7 @@ package jebja.libs;
 import hxd.Math;
 
 class Geom {
-	static final ANGLE_SENSITIVITY = 3;
+	public static final ANGLE_SENSITIVITY = 3;
 	public static final ANGLE_45 = 45;
 	public static final ANGLE_90 = 95;
 	public static final ANGLE_135 = 135;

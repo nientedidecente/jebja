@@ -22,7 +22,8 @@ class Player extends Collidable {
 
 	var t:Text;
 
-	var speed:Int;
+	var maxSpeed:Int;
+	var currentSpeed:Float;
 	var particles:Particles;
 	var g:ParticleGroup;
 	var movement = new Point(0, 0);
@@ -31,7 +32,8 @@ class Player extends Collidable {
 		var tile = Res.boat.toTile();
 		tile = tile.center();
 		super(parent, tile);
-		this.speed = 100;
+		this.maxSpeed = 2;
+		this.currentSpeed = 0;
 		this.collider = new Circle(this.x, this.y, tile.width * .5);
 		this.rotation = -Math.PI / 2;
 		t = new h2d.Text(hxd.res.DefaultFont.get(), parent);
@@ -62,12 +64,15 @@ class Player extends Collidable {
 
 	override function update(dt:Float) {
 		super.update(dt);
+		var turning = false;
 
 		if (Key.isDown(Key.RIGHT)) {
 			this.rotation += ROTATION_SPEED;
+			turning = true;
 		}
 		if (Key.isDown(Key.LEFT)) {
 			this.rotation -= ROTATION_SPEED;
+			turning = true;
 		}
 
 		// stopping for debug purposes
@@ -83,22 +88,31 @@ class Player extends Collidable {
 		this.printDirection();
 		#end
 		this.movement.normalize();
-		var modifiedSpeed = this.speed * this.getSpeedModifier();
-		this.x += this.movement.x * modifiedSpeed * dt;
-		this.y += this.movement.y * modifiedSpeed * dt;
 
-		if (modifiedSpeed > 10) {
-			var x = this.x;
-			var y = this.y;
+		currentSpeed = currentSpeed + this.getTotalAcceleration(dt, turning);
+
+		// Max speed and min speed should be dictated by the wind direction too
+		currentSpeed = this.adjustSpeed(currentSpeed);
+
+		var oldX = this.x;
+		var oldY = this.y;
+		this.x += this.movement.x * currentSpeed;
+		this.y += this.movement.y * currentSpeed;
+
+		if (currentSpeed > 0.6) {
 			Timer.delay(function() {
-				this.generateTrace(x, y);
+				this.generateTrace(oldX, oldY);
+				// trail delay should be dictated by the current speed
+				// maybe I could get oldX and oldY and correlate position 
+				// with newX and newY
 			}, TRAIL_DELAY);
 		}
 	}
 
 	function printDirection() {
 		t.text = 'x: ${this.movement.x}\n' + 'y: ${this.movement.y}\n' + 'rot: ${this.rotation}\n' + 'angle:${Geom.directionAngle(this.rotation)}\n'
-			+ 'relative-angle:${this.getRelativeAngle()}\n' + 'speed-modifier:${this.getSpeedModifier()}\n';
+			+ 'relative-angle:${this.getRelativeAngle()}\n' + 'wind-acceleration:${this.acceleration()}\n' + 'wind-resistence:${this.windResistence()}\n'
+			+ 'speed:${this.currentSpeed}\n';
 		t.x = this.x - 300;
 		t.y = this.y - 300;
 	}
@@ -107,7 +121,37 @@ class Player extends Collidable {
 		return (Geom.ANGLE_180 - WIND_DIRECTION - Geom.directionAngle(this.rotation));
 	}
 
-	function getSpeedModifier() {
+	function acceleration() {
 		return Geom.speedModifierFromAngle(this.getRelativeAngle());
+	}
+
+	function windResistence() {
+		if (Math.abs(this.getRelativeAngle()) <= Geom.ANGLE_SENSITIVITY * 2) {
+			return 0.8;
+		}
+		return 0.3;
+	}
+
+	function getTotalAcceleration(dt:Float, turning:Bool) {
+		return (this.acceleration() * dt) - ((turning ? 3 : 1) * this.windResistence() * dt);
+	}
+
+	function getMaxSpeed() {
+		// max speed should get also dictated by the tipe of
+		// sail: Spinnaker +5, normal +2
+		return this.maxSpeed * this.acceleration();
+	}
+
+	function adjustSpeed(currentSpeed:Float) {
+		var maxSpeed = this.getMaxSpeed();
+		if (currentSpeed > maxSpeed) {
+			currentSpeed = maxSpeed;
+		}
+
+		if (currentSpeed < 0) {
+			currentSpeed = 0;
+		}
+
+		return currentSpeed;
 	}
 }
