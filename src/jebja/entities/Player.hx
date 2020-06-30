@@ -12,6 +12,36 @@ import hxd.Key;
 import h2d.Tile;
 import differ.shapes.Circle;
 
+final class SailTypes {
+	public static final MAINSAIL = 'mainsail';
+	public static final STAYSAIL = 'staysail';
+	public static final SPINNAKER = 'spinnaker';
+
+	public static function getConfig(type:Null<String>) {
+		if (type == null) {
+			return {
+				maxSpeed: 0
+			};
+		}
+
+		if (type == SailTypes.STAYSAIL) {
+			return {
+				maxSpeed: 2
+			};
+		}
+
+		if (type == SailTypes.SPINNAKER) {
+			return {
+				maxSpeed: 5
+			};
+		}
+
+		return {
+			maxSpeed: 0
+		};
+	}
+}
+
 class Player extends Collidable {
 	static final TRAIL_DELAY = 350;
 	static final TRAIL_LIFE = 1500;
@@ -24,6 +54,7 @@ class Player extends Collidable {
 
 	var maxSpeed:Int;
 	var currentSpeed:Float;
+	var sail:Null<String>;
 	var particles:Particles;
 	var g:ParticleGroup;
 	var movement = new Point(0, 0);
@@ -32,7 +63,9 @@ class Player extends Collidable {
 		var tile = Res.boat.toTile();
 		tile = tile.center();
 		super(parent, tile);
-		this.maxSpeed = 2;
+
+		this.sail = SailTypes.STAYSAIL;
+		this.maxSpeed = SailTypes.getConfig(this.sail).maxSpeed;
 		this.currentSpeed = 0;
 		this.collider = new Circle(this.x, this.y, tile.width * .5);
 		this.rotation = -Math.PI / 2;
@@ -76,10 +109,8 @@ class Player extends Collidable {
 		}
 
 		// stopping for debug purposes
-		if (Key.isDown(Key.SPACE)) {
-			this.movement.y = 0;
-			this.movement.x = 0;
-			this.rotation = Math.PI;
+		if (Key.isReleased(Key.SPACE)) {
+			this.toggleSail();
 		}
 
 		this.movement.x = Math.cos((-Math.PI / 2) + this.rotation);
@@ -103,16 +134,16 @@ class Player extends Collidable {
 			Timer.delay(function() {
 				this.generateTrace(oldX, oldY);
 				// trail delay should be dictated by the current speed
-				// maybe I could get oldX and oldY and correlate position 
+				// maybe I could get oldX and oldY and correlate position
 				// with newX and newY
 			}, TRAIL_DELAY);
 		}
 	}
 
 	function printDirection() {
-		t.text = 'x: ${this.movement.x}\n' + 'y: ${this.movement.y}\n' + 'rot: ${this.rotation}\n' + 'angle:${Geom.directionAngle(this.rotation)}\n'
+		t.text = 'mov: (${this.movement.x} , ${this.movement.y})\n' + 'rot: ${this.rotation}\n' + 'angle:${Geom.directionAngle(this.rotation)}\n'
 			+ 'relative-angle:${this.getRelativeAngle()}\n' + 'wind-acceleration:${this.acceleration()}\n' + 'wind-resistence:${this.windResistence()}\n'
-			+ 'speed:${this.currentSpeed}\n';
+			+ 'speed:${this.currentSpeed}\n' + 'sail:${this.sail}\n';
 		t.x = this.x - 300;
 		t.y = this.y - 300;
 	}
@@ -153,5 +184,10 @@ class Player extends Collidable {
 		}
 
 		return currentSpeed;
+	}
+
+	function toggleSail() {
+		this.sail = (this.sail == SailTypes.STAYSAIL) ? SailTypes.SPINNAKER : SailTypes.STAYSAIL;
+		this.maxSpeed = SailTypes.getConfig(this.sail).maxSpeed;
 	}
 }
