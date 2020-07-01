@@ -113,11 +113,16 @@ class Player extends Collidable {
 			this.toggleSail();
 		}
 
+		#if debug
+		this.printDebugInfo();
+		#end
+
+		if (this.sail == null) {
+			return;
+		}
+
 		this.movement.x = Math.cos((-Math.PI / 2) + this.rotation);
 		this.movement.y = Math.sin((-Math.PI / 2) + this.rotation);
-		#if debug
-		this.printDirection();
-		#end
 		this.movement.normalize();
 
 		currentSpeed = currentSpeed + this.getTotalAcceleration(dt, turning);
@@ -140,7 +145,7 @@ class Player extends Collidable {
 		}
 	}
 
-	function printDirection() {
+	function printDebugInfo() {
 		t.text = 'mov: (${this.movement.x} , ${this.movement.y})\n' + 'rot: ${this.rotation}\n' + 'angle:${Geom.directionAngle(this.rotation)}\n'
 			+ 'relative-angle:${this.getRelativeAngle()}\n' + 'wind-acceleration:${this.acceleration()}\n' + 'wind-resistence:${this.windResistence()}\n'
 			+ 'speed:${this.currentSpeed}\n' + 'sail:${this.sail}\n';
@@ -164,7 +169,7 @@ class Player extends Collidable {
 	}
 
 	function getTotalAcceleration(dt:Float, turning:Bool) {
-		return (this.acceleration() * dt) - ((turning ? 3 : 1) * this.windResistence() * dt);
+		return (this.acceleration() * dt) - ((turning ? 2.5 : 1) * this.windResistence() * dt);
 	}
 
 	function getMaxSpeed() {
@@ -187,7 +192,7 @@ class Player extends Collidable {
 	}
 
 	function toggleSail() {
-		this.sail = (this.sail == SailTypes.STAYSAIL) ? SailTypes.SPINNAKER : SailTypes.STAYSAIL;
+		this.sail = (this.sail == SailTypes.STAYSAIL) ? null : SailTypes.STAYSAIL;
 		this.maxSpeed = SailTypes.getConfig(this.sail).maxSpeed;
 	}
 }
