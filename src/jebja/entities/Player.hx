@@ -20,7 +20,7 @@ final class SailTypes {
 	public static function getConfig(type:Null<String>) {
 		if (type == null) {
 			return {
-				maxSpeed: 0
+				maxSpeed: 2
 			};
 		}
 
@@ -37,14 +37,14 @@ final class SailTypes {
 		}
 
 		return {
-			maxSpeed: 0
+			maxSpeed: 2
 		};
 	}
 }
 
 class Player extends Collidable {
 	static final TRAIL_DELAY = 350;
-	static final TRAIL_LIFE = 1500;
+	static final TRAIL_LIFE = 4000;
 	static final ACCELLERATION = 1;
 	static final ROTATION_SPEED = 0.02;
 	static final SIZE = 30;
@@ -55,8 +55,6 @@ class Player extends Collidable {
 	var maxSpeed:Int;
 	var currentSpeed:Float;
 	var sail:Null<String>;
-	var particles:Particles;
-	var g:ParticleGroup;
 	var movement = new Point(0, 0);
 
 	public function new(parent:Object) {
@@ -65,6 +63,7 @@ class Player extends Collidable {
 		super(parent, tile);
 
 		this.sail = SailTypes.STAYSAIL;
+		this.maxSpeed = SailTypes.getConfig(this.sail).maxSpeed;
 		this.maxSpeed = SailTypes.getConfig(this.sail).maxSpeed;
 		this.currentSpeed = 0;
 		this.collider = new Circle(this.x, this.y, tile.width * .5);
@@ -117,15 +116,11 @@ class Player extends Collidable {
 		this.printDebugInfo();
 		#end
 
-		if (this.sail == null) {
-			return;
-		}
-
 		this.movement.x = Math.cos((-Math.PI / 2) + this.rotation);
 		this.movement.y = Math.sin((-Math.PI / 2) + this.rotation);
 		this.movement.normalize();
 
-		currentSpeed = currentSpeed + this.getTotalAcceleration(dt, turning);
+		currentSpeed = this.maxSpeed - ((this.maxSpeed - currentSpeed) * Math.exp(-this.getTotalAcceleration(dt, turning)));
 
 		// Max speed and min speed should be dictated by the wind direction too
 		currentSpeed = this.adjustSpeed(currentSpeed);
@@ -158,6 +153,11 @@ class Player extends Collidable {
 	}
 
 	function acceleration() {
+		// here we could pass the type of sail so we can
+		// check whether the acceleration should be changed
+		if (this.sail == null)
+			return 0.;
+
 		return Geom.speedModifierFromAngle(this.getRelativeAngle());
 	}
 
@@ -172,18 +172,7 @@ class Player extends Collidable {
 		return (this.acceleration() * dt) - ((turning ? 2.5 : 1) * this.windResistence() * dt);
 	}
 
-	function getMaxSpeed() {
-		// max speed should get also dictated by the tipe of
-		// sail: Spinnaker +5, normal +2
-		return this.maxSpeed * this.acceleration();
-	}
-
 	function adjustSpeed(currentSpeed:Float) {
-		var maxSpeed = this.getMaxSpeed();
-		if (currentSpeed > maxSpeed) {
-			currentSpeed = maxSpeed;
-		}
-
 		if (currentSpeed < 0) {
 			currentSpeed = 0;
 		}
