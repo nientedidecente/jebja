@@ -132,10 +132,7 @@ class Player extends Collidable {
 	}
 
 	function windResistence() {
-		if (Math.abs(this.getRelativeAngle()) <= Geom.ANGLE_SENSITIVITY * 2) {
-			return 0.8;
-		}
-		return 0.3;
+		return (Geom.speedModifierFromAngle(this.getRelativeAngle() - Geom.ANGLE_180) * .5) + .3;
 	}
 
 	function getTotalAcceleration(dt:Float, turning:Bool) {
