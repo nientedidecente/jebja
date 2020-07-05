@@ -4,12 +4,9 @@ import jebja.libs.Geom;
 import h2d.Text;
 import hxd.Res;
 import h2d.Object;
-import jebja.config.Colours;
 import haxe.Timer;
-import h2d.Particles;
 import h2d.col.Point;
 import hxd.Key;
-import h2d.Tile;
 import differ.shapes.Circle;
 
 final class SailTypes {
@@ -43,8 +40,6 @@ final class SailTypes {
 }
 
 class Player extends Collidable {
-	static final TRAIL_DELAY = 350;
-	static final TRAIL_LIFE = 4000;
 	static final ACCELLERATION = 1;
 	static final ROTATION_SPEED = 0.02;
 	static final SIZE = 30;
@@ -71,27 +66,16 @@ class Player extends Collidable {
 		t = new h2d.Text(hxd.res.DefaultFont.get(), parent);
 	}
 
-	function generateTrace(x, y) {
-		var particles = new Particles(this.parent);
-		var g = new ParticleGroup(particles);
-		g.texture = Tile.fromColor(Colours.TRAIL).getTexture();
-		g.size = 3;
-		g.nparts = 10;
-		g.sizeRand = .2;
-		g.life = .3;
-		g.speed = 5;
-		g.speedRand = 3;
-		g.emitMode = PartEmitMode.Point;
-		g.emitDist = 10;
-		g.fadeIn = 0;
-		g.fadeOut = 0.9;
-		particles.x = x;
-		particles.y = y;
-		particles.addGroup(g);
-		Timer.delay(function() {
-			particles.removeGroup(g);
-			particles.remove();
-		}, TRAIL_LIFE);
+	function generateTrace(positions) {
+		var position = Trace.getOrigin(positions.oldPos, positions.newPos);
+		if (currentSpeed > 0.6) {
+			Timer.delay(function() {
+				new Trace(position.x, position.y, this.parent);
+				// trail delay should be dictated by the current speed
+				// maybe I could get oldX and oldY and correlate position
+				// with newX and newY
+			}, position.delay);
+		}
 	}
 
 	override function update(dt:Float) {
@@ -129,15 +113,11 @@ class Player extends Collidable {
 		var oldY = this.y;
 		this.x += this.movement.x * currentSpeed;
 		this.y += this.movement.y * currentSpeed;
-
-		if (currentSpeed > 0.6) {
-			Timer.delay(function() {
-				this.generateTrace(oldX, oldY);
-				// trail delay should be dictated by the current speed
-				// maybe I could get oldX and oldY and correlate position
-				// with newX and newY
-			}, TRAIL_DELAY);
-		}
+		var positions = {
+			oldPos: new Point(oldX, oldY),
+			newPos: new Point(this.x, this.y)
+		};
+		this.generateTrace(positions);
 	}
 
 	function printDebugInfo() {
@@ -169,7 +149,7 @@ class Player extends Collidable {
 	}
 
 	function getTotalAcceleration(dt:Float, turning:Bool) {
-		return (this.acceleration() * dt) - ((turning ? 2.5 : 1) * this.windResistence() * dt);
+		return (this.acceleration() * dt) - ((turning ? 3 : 1) * this.windResistence() * dt);
 	}
 
 	function adjustSpeed(currentSpeed:Float) {
