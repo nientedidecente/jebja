@@ -4,7 +4,6 @@ import jebja.libs.Geom;
 import h2d.Text;
 import hxd.Res;
 import h2d.Object;
-import haxe.Timer;
 import h2d.col.Point;
 import hxd.Key;
 import differ.shapes.Circle;

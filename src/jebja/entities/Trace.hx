@@ -1,6 +1,5 @@
 package jebja.entities;
 
-import differ.math.Vector;
 import h2d.col.Point;
 import haxe.Timer;
 import jebja.config.Colours;
@@ -9,7 +8,7 @@ import h2d.Particles;
 import h2d.Object;
 
 class Trace {
-	static final LIFE = 4000;
+	static final LIFE = 5000;
 
 	public static function show(x, y, parent:Object, lifespan:Null<Int> = null) {
 		lifespan = lifespan == null ? LIFE : lifespan;
