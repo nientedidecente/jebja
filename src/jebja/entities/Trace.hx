@@ -1,5 +1,6 @@
 package jebja.entities;
 
+import differ.math.Vector;
 import h2d.col.Point;
 import haxe.Timer;
 import jebja.config.Colours;
@@ -8,10 +9,9 @@ import h2d.Particles;
 import h2d.Object;
 
 class Trace {
-	public static final DELAY = 350;
 	static final LIFE = 4000;
 
-	public function new(x, y, parent:Object, lifespan:Null<Int> = null) {
+	public static function show(x, y, parent:Object, lifespan:Null<Int> = null) {
 		lifespan = lifespan == null ? LIFE : lifespan;
 		var particles = new Particles(parent);
 		var g = new ParticleGroup(particles);
@@ -35,11 +35,10 @@ class Trace {
 		}, lifespan);
 	}
 
-	public static function getOrigin(oldPosition:Point, newPosition:Point) {
-		return {
-			x: oldPosition.x,
-			y: oldPosition.y,
-			delay: Trace.DELAY
-		}
+	public static function getOrigin(position:Point, movement:Point):Point {
+		var spacing = (Player.SIZE / 2) + 1;
+		var x = position.x + (-1 * movement.x * spacing);
+		var y = position.y + (-1 * movement.y * spacing);
+		return new Point(x, y);
 	}
 }

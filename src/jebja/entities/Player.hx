@@ -40,9 +40,9 @@ final class SailTypes {
 }
 
 class Player extends Collidable {
-	static final ACCELLERATION = 1;
+	public static final SIZE = 64;
+
 	static final ROTATION_SPEED = 0.02;
-	static final SIZE = 30;
 	static final WIND_DIRECTION = Geom.ANGLE_180;
 
 	var t:Text;
@@ -66,15 +66,10 @@ class Player extends Collidable {
 		t = new h2d.Text(hxd.res.DefaultFont.get(), parent);
 	}
 
-	function generateTrace(positions) {
-		var position = Trace.getOrigin(positions.oldPos, positions.newPos);
-		if (currentSpeed > 0.6) {
-			Timer.delay(function() {
-				new Trace(position.x, position.y, this.parent);
-				// trail delay should be dictated by the current speed
-				// maybe I could get oldX and oldY and correlate position
-				// with newX and newY
-			}, position.delay);
+	function generateTrace(position:Point, movement:Point, speed:Float) {
+		var origin = Trace.getOrigin(position, movement);
+		if (speed > 0.3) {
+			Trace.show(origin.x, origin.y, this.parent);
 		}
 	}
 
@@ -113,11 +108,7 @@ class Player extends Collidable {
 		var oldY = this.y;
 		this.x += this.movement.x * currentSpeed;
 		this.y += this.movement.y * currentSpeed;
-		var positions = {
-			oldPos: new Point(oldX, oldY),
-			newPos: new Point(this.x, this.y)
-		};
-		this.generateTrace(positions);
+		this.generateTrace(new Point(oldX, oldY), this.movement, currentSpeed);
 	}
 
 	function printDebugInfo() {
