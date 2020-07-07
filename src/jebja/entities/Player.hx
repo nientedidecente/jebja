@@ -1,5 +1,6 @@
 package jebja.entities;
 
+import jebja.libs.Atlas;
 import jebja.libs.Geom;
 import h2d.Text;
 import hxd.Res;
@@ -52,11 +53,10 @@ class Player extends Collidable {
 	var movement = new Point(0, 0);
 
 	public function new(parent:Object) {
-		var tile = Res.boat.toTile();
-		tile = tile.center();
+		this.sail = SailTypes.STAYSAIL;
+		var tile = Atlas.instance.get(this.sail).center();
 		super(parent, tile);
 
-		this.sail = SailTypes.STAYSAIL;
 		this.maxSpeed = SailTypes.getConfig(this.sail).maxSpeed;
 		this.maxSpeed = SailTypes.getConfig(this.sail).maxSpeed;
 		this.currentSpeed = 0;
@@ -151,6 +151,7 @@ class Player extends Collidable {
 
 	function toggleSail() {
 		this.sail = (this.sail == SailTypes.STAYSAIL) ? null : SailTypes.STAYSAIL;
+		this.tile = Atlas.instance.get(sail == null ? 'base' : sail).center();
 		this.maxSpeed = SailTypes.getConfig(this.sail).maxSpeed;
 	}
 }
