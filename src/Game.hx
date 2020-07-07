@@ -14,14 +14,6 @@ class Game extends App {
 	}
 
 	static function main() {
-		#if hl
-		Res.initLocal();
-		#end
-
-		#if js
-		Res.initEmbed();
-		#end
-
 		new Game();
 	}
 
