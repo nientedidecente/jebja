@@ -134,7 +134,7 @@ class Player extends Collidable {
 	function windResistence() {
 		// the .3 is a base one, should be given by the sail used
 		// no sail means higher resistence
-		return (Geom.speedModifierFromAngle(this.getRelativeAngle() - Geom.ANGLE_180) * .5) + .3;
+		return (Geom.speedModifierFromAngle(this.getRelativeAngle() - Geom.ANGLE_180) * .3) + .3;
 	}
 
 	function getTotalAcceleration(dt:Float, turning:Bool) {
