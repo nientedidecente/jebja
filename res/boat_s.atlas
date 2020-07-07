@@ -18,3 +18,10 @@ staysail
   orig: 32, 32
   offset: 0, 0
   index: -1
+spinnaker
+  rotate: false
+  xy: 64, 64
+  size: 64, 64
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
