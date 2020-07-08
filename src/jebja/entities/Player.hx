@@ -9,20 +9,31 @@ import hxd.Key;
 import differ.shapes.Circle;
 
 final class SailConfig {
-	public var maxSpeed:Float;
+	public var maxSpeed:{
+		closeWind:Float,
+		stern:Float,
+		bow:Float,
+		across:Float
+	};
 	public var windResistence:Float;
 
-	public function new(config) {
-		this.maxSpeed = config.maxSpeed;
+	public function new(config:{maxSpeed:Array<Float>, windResistence:Float}) {
+		this.maxSpeed = {
+			stern: config.maxSpeed[0],
+			bow: config.maxSpeed[1],
+			closeWind: config.maxSpeed[2],
+			across: config.maxSpeed[3],
+		};
 		this.windResistence = config.windResistence;
 	}
 
-	public static function make(config):SailConfig {
+	public static function make(config:{maxSpeed:Array<Float>, windResistence:Float}):SailConfig {
 		return new SailConfig(config);
 	}
 }
 
 final class SailTypes {
+	static final SENSITIVITY = .2;
 	public static final MAINSAIL = 'mainsail';
 	public static final STAYSAIL = 'staysail';
 	public static final SPINNAKER = 'spinnaker';
@@ -30,22 +41,41 @@ final class SailTypes {
 	public static function getConfig(type:Null<String>):SailConfig {
 		if (type == SailTypes.STAYSAIL) {
 			return SailConfig.make({
-				maxSpeed: 2,
+				// Stern, Bow, CloseWind, Across
+				maxSpeed: [2, 0, 2, 1.5],
 				windResistence: .3
 			});
 		}
 
 		if (type == SailTypes.SPINNAKER) {
 			return SailConfig.make({
-				maxSpeed: 5,
-				windResistence: .5
+				maxSpeed: [3.5, 0, .5, .5],
+				windResistence: .4
 			});
 		}
 
 		return SailConfig.make({
-			maxSpeed: 0.3,
+			maxSpeed: [.3, 0, 0, 0],
 			windResistence: .6
 		});
+	}
+
+	public static function getMaxSpeed(config:SailConfig, angle:Float):Float {
+		var modifier = Geom.modifierFromAngle(angle);
+
+		if (modifier <= SENSITIVITY) {
+			return config.maxSpeed.bow;
+		}
+
+		if (modifier <= (.5 + SENSITIVITY)) {
+			return config.maxSpeed.across;
+		}
+
+		if (modifier <= (1 + SENSITIVITY)) {
+			return config.maxSpeed.closeWind;
+		}
+
+		return config.maxSpeed.stern;
 	}
 }
 
@@ -128,13 +158,14 @@ class Player extends Collidable {
 
 	function printDebugInfo(totalAcc:Float) {
 		t.text = 'mov: (${this.movement.x} , ${this.movement.y})\n' + 'rot: ${this.rotation}\n' + 'angle:${Geom.directionAngle(this.rotation)}\n'
-			+ 'relative-angle:${this.getRelativeAngle()}\n' + 'wind-acceleration:${this.acceleration()}\n' + 'wind-resistence:${this.windResistence()}\n'
-			+ 'totalAcc:${totalAcc}\n' + 'speed:${this.currentSpeed}\n' + 'sail:${this.sail}\n';
+			+ 'relative-angle:${this.getRelativeAngle()}\n' + 'acceleration:${this.acceleration()}\n'
+			+ 'wind-resistence:${this.windResistence()}\n' + 'totalAcc:${totalAcc}\n' + 'speed:${this.currentSpeed}\n' + 'maxSpeed:${this.getMaxSpeed()}\n'
+			+ 'sail:${this.sail}\n';
 		t.x = this.x - 300;
 		t.y = this.y - 300;
 	}
 
-	function getRelativeAngle() {
+	function getRelativeAngle():Int {
 		return (Geom.ANGLE_180 - WIND_DIRECTION - Geom.directionAngle(this.rotation));
 	}
 
@@ -144,11 +175,11 @@ class Player extends Collidable {
 		if (this.sail == null)
 			return 0.;
 
-		return Geom.speedModifierFromAngle(this.getRelativeAngle());
+		return Geom.modifierFromAngle(this.getRelativeAngle());
 	}
 
 	function windResistence() {
-		return (Geom.speedModifierFromAngle(this.getRelativeAngle() - Geom.ANGLE_180) * .3) + this.sailConfig.windResistence;
+		return (Geom.modifierFromAngle(this.getRelativeAngle() - Geom.ANGLE_180) * .3) + this.sailConfig.windResistence;
 	}
 
 	function getTotalAcceleration(dt:Float, turning:Bool) {
@@ -167,7 +198,7 @@ class Player extends Collidable {
 	}
 
 	function getMaxSpeed() {
-		return this.sailConfig.maxSpeed;
+		return SailTypes.getMaxSpeed(this.sailConfig, this.getRelativeAngle());
 	}
 
 	function toggleSail() {

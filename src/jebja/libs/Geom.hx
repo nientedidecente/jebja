@@ -26,7 +26,7 @@ class Geom {
 		return Math.ceil(Math.radToDeg(rotation % (2 * Math.PI)));
 	}
 
-	public static function speedModifierFromAngle(angle:Float):Float {
+	public static function modifierFromAngle(angle:Float):Float {
 		angle = Math.abs(angle);
 
 		if (angle == 0 || angle < ANGLE_SENSITIVITY) {
