@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import h2d.Particles;
 import h2d.Camera;
 import jebja.entities.Buoy;
 import jebja.config.Colours;
@@ -25,6 +26,8 @@ class World extends BaseScene {
 			enemy.x = 200 + 200 * (1 * i);
 			enemy.y = -(100 + 200 * (1 * i));
 		}
+
+		this.generateSea();
 
 		player = new Player(camera);
 
@@ -57,5 +60,20 @@ class World extends BaseScene {
 				onStart();
 			}
 		});
+	}
+
+	public function generateSea() {
+		var particles = new Particles(this);
+		var g = new ParticleGroup(particles);
+		particles.addGroup(g);
+		g.size = .2;
+		g.gravity = 1;
+		g.life = 5;
+		g.speed = 100;
+		g.speedRand = 3;
+		g.emitMode = PartEmitMode.Direction;
+		g.emitDist = this.width;
+		g.emitAngle = Math.PI / 2;
+		g.fadeOut = .5;
 	}
 }
