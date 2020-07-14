@@ -10,8 +10,6 @@ import ui.UiHelper;
 import jebja.entities.Player;
 
 class World extends BaseScene {
-	static final THRESHOLD = 100;
-
 	var camera:Camera;
 	var player:Player;
 	var gameOver = false;
@@ -21,13 +19,12 @@ class World extends BaseScene {
 		gameOver = false;
 		var bg = UiHelper.addBackground(this, Colours.SEA);
 		camera = new Camera(this);
+		this.generateSea(camera);
 		for (i in 0...200) {
 			var enemy = new Buoy(camera);
 			enemy.x = 200 + 200 * (1 * i);
 			enemy.y = -(100 + 200 * (1 * i));
 		}
-
-		this.generateSea();
 
 		player = new Player(camera);
 
@@ -62,18 +59,20 @@ class World extends BaseScene {
 		});
 	}
 
-	public function generateSea() {
-		var particles = new Particles(this);
+	public function generateSea(parent) {
+		var particles = new Particles(parent);
 		var g = new ParticleGroup(particles);
 		particles.addGroup(g);
+		g.nparts = 400;
 		g.size = .2;
-		g.gravity = 1;
+		g.gravity = -1;
 		g.life = 5;
-		g.speed = 100;
+		g.speed = 2;
 		g.speedRand = 3;
-		g.emitMode = PartEmitMode.Direction;
+		g.emitMode = PartEmitMode.Box;
+		g.emitAngle = Math.PI;
 		g.emitDist = this.width;
-		g.emitAngle = Math.PI / 2;
-		g.fadeOut = .5;
+		g.emitDistY = this.height;
+		g.dx = cast this.width;
 	}
 }
