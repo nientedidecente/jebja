@@ -81,6 +81,7 @@ final class SailTypes {
 
 class Player extends Collidable {
 	public static final SIZE = 64;
+	static final TRACE_SESITIVITY = .24;
 
 	static final ROTATION_SPEED = 0.02;
 	// need to make this variable
@@ -108,7 +109,7 @@ class Player extends Collidable {
 
 	function generateTrace(position:Point, movement:Point, speed:Float) {
 		var origin = Trace.getOrigin(position, movement);
-		if (speed > 0.3) {
+		if (speed >= TRACE_SESITIVITY) {
 			Trace.show(origin.x, origin.y, this.parent);
 		}
 	}
