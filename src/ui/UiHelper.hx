@@ -7,7 +7,7 @@ import h2d.Tile;
 
 class UiHelper {
 	public static function addBackground(scene:Scene, colour:Int = 0xffffff) {
-		var backgound = new Bitmap(Tile.fromColor(colour, scene.width, scene.height), scene);
+		var backgound = new Bitmap(Tile.fromColor(colour, scene.width * 1000, scene.height * 1000), scene);
 		backgound.x = 0;
 		backgound.y = 0;
 		return backgound;

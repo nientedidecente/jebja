@@ -11,6 +11,10 @@ Prerequisites:
 - [Haxe](https://haxe.org/download/) installed (used version 4.1.2 while developing).
 - [Hashlink](https://hashlink.haxe.org/) installed (if you want to use the SDL version)
 
+To use unreleased features like the new 2d camera:
+```
+haxelib git heaps git@github.com:HeapsIO/heaps.git master
+```
 To install dependencies
 ```
 haxelib install hxml/js.hxml // deps for js

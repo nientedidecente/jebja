@@ -1,7 +1,6 @@
 package jebja.scenes;
 
 import h2d.Particles;
-import h2d.Camera;
 import jebja.entities.Buoy;
 import jebja.config.Colours;
 import hxd.Key;
@@ -10,7 +9,6 @@ import ui.UiHelper;
 import jebja.entities.Player;
 
 class World extends BaseScene {
-	var camera:Camera;
 	var player:Player;
 	var gameOver = false;
 
@@ -18,18 +16,20 @@ class World extends BaseScene {
 		super.init();
 		gameOver = false;
 		var bg = UiHelper.addBackground(this, Colours.SEA);
-		camera = new Camera(this);
-		this.generateSea(camera);
+		bg.tile = bg.tile.center();
+		this.generateSea(this);
 		for (i in 0...200) {
-			var enemy = new Buoy(camera);
+			var enemy = new Buoy(this);
 			enemy.x = 200 + 200 * (1 * i);
 			enemy.y = -(100 + 200 * (1 * i));
 		}
 
-		player = new Player(camera);
+		player = new Player(this);
 
-		player.x = bg.width * .5;
-		player.y = bg.height * .5;
+		player.x = 0;
+		player.y = 0;
+		camera.setAnchor(.5, .5);
+		camera.follow = player;
 	}
 
 	override function update(dt:Float) {
@@ -42,9 +42,6 @@ class World extends BaseScene {
 		}
 
 		player.update(dt);
-
-		camera.viewX = player.x;
-		camera.viewY = player.y;
 	}
 
 	public function registerHandlers(onQuit:Void->Void, onStart:Void->Void) {
