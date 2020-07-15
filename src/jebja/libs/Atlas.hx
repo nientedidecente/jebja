@@ -22,4 +22,8 @@ class Atlas {
 	public function get(name:String):Tile {
 		return atlas.get(name);
 	}
+
+	public function getTexture(name:String) {
+		return Res.load('${name}.png').toTexture();
+	}
 }
