@@ -8,95 +8,22 @@ import h2d.col.Point;
 import hxd.Key;
 import differ.shapes.Circle;
 
-final class SailConfig {
-	public var maxSpeed:{
-		closeWind:Float,
-		stern:Float,
-		bow:Float,
-		across:Float
-	};
-	public var windResistence:Float;
-
-	public function new(config:{maxSpeed:Array<Float>, windResistence:Float}) {
-		this.maxSpeed = {
-			stern: config.maxSpeed[0],
-			bow: config.maxSpeed[1],
-			closeWind: config.maxSpeed[2],
-			across: config.maxSpeed[3],
-		};
-		this.windResistence = config.windResistence;
-	}
-
-	public static function make(config:{maxSpeed:Array<Float>, windResistence:Float}):SailConfig {
-		return new SailConfig(config);
-	}
-}
-
-final class SailTypes {
-	static final SENSITIVITY = .2;
-	public static final MAINSAIL = 'mainsail';
-	public static final STAYSAIL = 'staysail';
-	public static final SPINNAKER = 'spinnaker';
-
-	public static function getConfig(type:Null<String>):SailConfig {
-		if (type == SailTypes.STAYSAIL) {
-			return SailConfig.make({
-				// Stern, Bow, CloseWind, Across
-				maxSpeed: [2, 0, 2, 1.5],
-				windResistence: .3
-			});
-		}
-
-		if (type == SailTypes.SPINNAKER) {
-			return SailConfig.make({
-				maxSpeed: [3.5, 0, .5, .5],
-				windResistence: .4
-			});
-		}
-
-		return SailConfig.make({
-			maxSpeed: [.3, 0, 0, 0],
-			windResistence: .6
-		});
-	}
-
-	public static function getMaxSpeed(config:SailConfig, angle:Float):Float {
-		var modifier = Geom.modifierFromAngle(angle);
-
-		if (modifier <= SENSITIVITY) {
-			return config.maxSpeed.bow;
-		}
-
-		if (modifier <= (.5 + SENSITIVITY)) {
-			return config.maxSpeed.across;
-		}
-
-		if (modifier <= (1 + SENSITIVITY)) {
-			return config.maxSpeed.closeWind;
-		}
-
-		return config.maxSpeed.stern;
-	}
-}
-
 class Player extends Collidable {
 	public static final SIZE = 64;
 	static final TRACE_SESITIVITY = .24;
 
 	static final ROTATION_SPEED = 0.02;
-	// need to make this variable
-	// and also add a way to get the intensity of it
-	// maybe also made maxspeed dependent on this
-	static final WIND_DIRECTION = Geom.ANGLE_180;
 
 	var t:Text;
 	var currentSpeed:Float;
 	var sail:Null<String>;
 	var sailConfig:SailConfig;
 	var movement = new Point(0, 0);
+	var wind:Wind;
 
-	public function new(parent:Object) {
+	public function new(parent:Object, wind:Wind) {
 		this.sail = SailTypes.STAYSAIL;
+		this.wind = wind;
 		var tile = Atlas.instance.get(this.sail).center();
 		super(parent, tile);
 		this.setSail(this.sail);
@@ -105,6 +32,11 @@ class Player extends Collidable {
 		this.collider = new Circle(this.x, this.y, tile.width * .5);
 		this.rotation = -Math.PI / 2;
 		t = new h2d.Text(hxd.res.DefaultFont.get(), parent);
+	}
+
+	public function setWind(wind:Wind):Player {
+		this.wind = wind;
+		return this;
 	}
 
 	function generateTrace(position:Point, movement:Point, speed:Float) {
@@ -159,15 +91,14 @@ class Player extends Collidable {
 
 	function printDebugInfo(totalAcc:Float) {
 		t.text = 'mov: (${this.movement.x} , ${this.movement.y})\n' + 'rot: ${this.rotation}\n' + 'angle:${Geom.directionAngle(this.rotation)}\n'
-			+ 'relative-angle:${this.getRelativeAngle()}\n' + 'acceleration:${this.acceleration()}\n'
-			+ 'wind-resistence:${this.windResistence()}\n' + 'totalAcc:${totalAcc}\n' + 'speed:${this.currentSpeed}\n' + 'maxSpeed:${this.getMaxSpeed()}\n'
-			+ 'sail:${this.sail}\n';
+			+ 'relative-angle:${this.getRelativeAngle()}\n' + 'acceleration:${this.acceleration()}\n' + 'wind-resistence:${this.windResistence()}\n'
+			+ 'totalAcc:${totalAcc}\n' + 'speed:${this.currentSpeed}\n' + 'maxSpeed:${this.getMaxSpeed()}\n' + 'sail:${this.sail}\n';
 		t.x = this.x - 300;
 		t.y = this.y - 300;
 	}
 
 	function getRelativeAngle():Int {
-		return (Geom.ANGLE_180 - WIND_DIRECTION - Geom.directionAngle(this.rotation));
+		return (Geom.ANGLE_180 - this.wind.direction - Geom.directionAngle(this.rotation));
 	}
 
 	function acceleration() {

@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import jebja.entities.Wind;
 import jebja.libs.Atlas;
 import h2d.Particles;
 import h2d.Camera;
@@ -26,7 +27,7 @@ class World extends BaseScene {
 			enemy.y = -(100 + 200 * (1 * i));
 		}
 
-		player = new Player(camera);
+		player = new Player(camera, Wind.generate());
 
 		player.x = bg.width * .5;
 		player.y = bg.height * .5;
