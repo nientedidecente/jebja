@@ -11,7 +11,6 @@ import differ.shapes.Circle;
 class Player extends Collidable {
 	public static final SIZE = 64;
 	static final TRACE_SESITIVITY = .24;
-
 	static final ROTATION_SPEED = 0.02;
 
 	var t:Text;
@@ -20,6 +19,10 @@ class Player extends Collidable {
 	var sailConfig:SailConfig;
 	var movement = new Point(0, 0);
 	var wind:Wind;
+
+	#if debug
+	var showDebug = true;
+	#end
 
 	public function new(parent:Object, wind:Wind) {
 		this.sail = SailTypes.STAYSAIL;
@@ -76,7 +79,13 @@ class Player extends Collidable {
 		var totalAcc = this.getTotalAcceleration(dt, turning);
 		currentSpeed = this.getMaxSpeed() - ((this.getMaxSpeed() - currentSpeed) * Math.exp(-totalAcc));
 		#if debug
-		this.printDebugInfo(totalAcc);
+		if (Key.isReleased(Key.F1)) {
+			showDebug = !showDebug;
+		}
+
+		if (showDebug) {
+			this.printDebugInfo(totalAcc);
+		}
 		#end
 
 		// Max speed and min speed should be dictated by the wind direction too
@@ -115,9 +124,6 @@ class Player extends Collidable {
 	}
 
 	function getTotalAcceleration(dt:Float, turning:Bool) {
-		// the abs fixes the incredible acceleration on no sail
-		// but breaks the way we decelerate to 0 against wind
-		// we need maxspeed to be a function of SailType and Angle against wind
 		return Math.abs((this.acceleration() * dt) - ((turning ? 3 : 1) * this.windResistence() * dt));
 	}
 
