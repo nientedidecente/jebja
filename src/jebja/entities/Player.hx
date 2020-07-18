@@ -25,11 +25,10 @@ class Player extends Collidable {
 	#end
 
 	public function new(parent:Object, wind:Wind) {
-		this.sail = SailTypes.STAYSAIL;
-		this.wind = wind;
-		var tile = Atlas.instance.get(this.sail).center();
+		var tile = Atlas.instance.get(SailTypes.NONE).center();
 		super(parent, tile);
-		this.setSail(this.sail);
+		this.setSail(SailTypes.NONE);
+		this.wind = wind;
 
 		this.currentSpeed = 0;
 		this.collider = new Circle(this.x, this.y, tile.width * .5);
@@ -140,13 +139,13 @@ class Player extends Collidable {
 	}
 
 	function toggleSail() {
-		var sail = (this.sail == null) ? SailTypes.STAYSAIL : null;
+		var sail = (this.sail == SailTypes.NONE) ? SailTypes.STAYSAIL : SailTypes.NONE;
 		this.setSail(sail);
 	}
 
 	function setSail(sailType:String) {
 		this.sail = sailType;
-		this.tile = Atlas.instance.get(sail == null ? 'base' : sail).center();
+		this.tile = Atlas.instance.get(this.sail).center();
 		this.sailConfig = SailTypes.getConfig(this.sail);
 	}
 }

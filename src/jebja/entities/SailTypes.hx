@@ -4,6 +4,7 @@ import jebja.libs.Geom;
 
 final class SailTypes {
 	static final SENSITIVITY = .2;
+	public static final NONE = 'base';
 	public static final MAINSAIL = 'mainsail';
 	public static final STAYSAIL = 'staysail';
 	public static final SPINNAKER = 'spinnaker';
