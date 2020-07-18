@@ -11,7 +11,7 @@ class Menu extends BaseScene {
 		UiHelper.addBackground(this, Colours.SEA);
 		UiHelper.addHeader('jebja', this);
 		#if js
-		var escAction = 'to see the Code';
+		var escAction = 'to see the github repo';
 		#else
 		var escAction = 'to Quit';
 		#end

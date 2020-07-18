@@ -45,7 +45,7 @@ class Game extends App {
 		if (Key.isPressed(Key.ESCAPE)) {
 			trace('ESCAPE pressed');
 			#if js
-			js.Browser.document.location.replace("https://vikkio.me");
+			js.Browser.document.location.replace("https://github.com/nientedidecente/jebja");
 			#else
 			Sys.exit(0);
 			#end
