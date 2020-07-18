@@ -1,8 +1,7 @@
 package jebja.scenes;
 
+import haxe.Timer;
 import jebja.entities.Wind;
-import jebja.libs.Atlas;
-import h2d.Particles;
 import h2d.Camera;
 import jebja.entities.Buoy;
 import jebja.config.Colours;
@@ -31,6 +30,11 @@ class World extends BaseScene {
 
 		player.x = bg.width * .5;
 		player.y = bg.height * .5;
+
+		var tips = UiHelper.addTips('[Enter] to Restart\n[SPACE] to Toggle Stailsail\n[S] To open Spinnaker\n[-] To show Debug\n[Q] To Quit', this);
+		Timer.delay(function() {
+			tips.remove();
+		}, 6000);
 	}
 
 	override function update(dt:Float) {

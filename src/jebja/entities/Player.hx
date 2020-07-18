@@ -13,7 +13,6 @@ class Player extends Collidable {
 	static final TRACE_SESITIVITY = .24;
 	static final ROTATION_SPEED = 0.02;
 
-	var t:Text;
 	var currentSpeed:Float;
 	var sail:Null<String>;
 	var sailConfig:SailConfig;
@@ -21,7 +20,8 @@ class Player extends Collidable {
 	var wind:Wind;
 
 	#if debug
-	var showDebug = true;
+	var showDebug = false;
+	var debugText:Text = null;
 	#end
 
 	public function new(parent:Object, wind:Wind) {
@@ -33,7 +33,7 @@ class Player extends Collidable {
 		this.currentSpeed = 0;
 		this.collider = new Circle(this.x, this.y, tile.width * .5);
 		this.rotation = -Math.PI / 2;
-		t = new h2d.Text(hxd.res.DefaultFont.get(), parent);
+		debugText = new h2d.Text(hxd.res.DefaultFont.get(), parent);
 	}
 
 	public function setWind(wind:Wind):Player {
@@ -78,12 +78,14 @@ class Player extends Collidable {
 		var totalAcc = this.getTotalAcceleration(dt, turning);
 		currentSpeed = this.getMaxSpeed() - ((this.getMaxSpeed() - currentSpeed) * Math.exp(-totalAcc));
 		#if debug
-		if (Key.isReleased(Key.F1)) {
+		if (Key.isReleased(Key.QWERTY_MINUS)) {
 			showDebug = !showDebug;
 		}
 
 		if (showDebug) {
 			this.printDebugInfo(totalAcc);
+		} else {
+			debugText.text = '';
 		}
 		#end
 
@@ -98,11 +100,11 @@ class Player extends Collidable {
 	}
 
 	function printDebugInfo(totalAcc:Float) {
-		t.text = 'mov: (${this.movement.x} , ${this.movement.y})\n' + 'rot: ${this.rotation}\n' + 'angle:${Geom.directionAngle(this.rotation)}\n'
+		debugText.text = 'mov: (${this.movement.x} , ${this.movement.y})\n' + 'rot: ${this.rotation}\n' + 'angle:${Geom.directionAngle(this.rotation)}\n'
 			+ 'relative-angle:${this.getRelativeAngle()}\n' + 'acceleration:${this.acceleration()}\n' + 'wind-resistence:${this.windResistence()}\n'
 			+ 'totalAcc:${totalAcc}\n' + 'speed:${this.currentSpeed}\n' + 'maxSpeed:${this.getMaxSpeed()}\n' + 'sail:${this.sail}\n';
-		t.x = this.x - 300;
-		t.y = this.y - 300;
+		debugText.x = this.x - 300;
+		debugText.y = this.y - 300;
 	}
 
 	function getRelativeAngle():Int {

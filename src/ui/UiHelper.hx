@@ -34,4 +34,14 @@ class UiHelper {
 
 		return t;
 	}
+
+	public static function addTips(label:String, scene:Scene) {
+		var t = new h2d.Text(hxd.res.DefaultFont.get(), scene);
+		t.scale(2);
+		t.text = label;
+		t.x = 0;
+		t.y = 0;
+
+		return t;
+	}
 }
