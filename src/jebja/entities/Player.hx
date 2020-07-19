@@ -1,5 +1,6 @@
 package jebja.entities;
 
+import h2d.Bitmap;
 import jebja.libs.Atlas;
 import jebja.libs.Geom;
 import h2d.Text;
@@ -17,7 +18,10 @@ class Player extends Collidable {
 	var sail:Null<String>;
 	var sailConfig:SailConfig;
 	var movement = new Point(0, 0);
+
 	var wind:Wind;
+	var windIndicator:Bitmap;
+	var showWindicator = true;
 
 	#if debug
 	var showDebug = false;
@@ -33,12 +37,23 @@ class Player extends Collidable {
 		this.currentSpeed = 0;
 		this.collider = new Circle(this.x, this.y, tile.width * .5);
 		this.rotation = -Math.PI / 2;
+		windIndicator = new Bitmap(Atlas.instance.getRes('wind').toTile(), parent);
+		windIndicator.setScale(.5);
+
+		#if debug
 		debugText = new h2d.Text(hxd.res.DefaultFont.get(), parent);
+		#end
 	}
 
 	public function setWind(wind:Wind):Player {
 		this.wind = wind;
 		return this;
+	}
+
+	public function updateWindicator() {
+		windIndicator.visible = showWindicator;
+		windIndicator.x = this.x - SIZE;
+		windIndicator.y = this.y - SIZE;
 	}
 
 	function generateTrace(position:Point, movement:Point, speed:Float) {
@@ -50,6 +65,7 @@ class Player extends Collidable {
 
 	override function update(dt:Float) {
 		super.update(dt);
+		this.updateWindicator();
 		var turning = false;
 
 		if (Key.isDown(Key.RIGHT)) {
@@ -62,13 +78,18 @@ class Player extends Collidable {
 		}
 
 		// toggling sails
-		if (Key.isReleased(Key.SPACE)) {
+		if (Key.isReleased(Key.UP)) {
 			this.toggleSail();
 		}
 
 		// opening spinnaker
-		if (Key.isReleased(Key.S)) {
+		if (Key.isReleased(Key.SPACE)) {
 			this.setSail(SailTypes.SPINNAKER);
+		}
+
+		// Windicator
+		if (Key.isReleased(Key.W)) {
+			showWindicator = !showWindicator;
 		}
 
 		this.movement.x = Math.cos((-Math.PI / 2) + this.rotation);

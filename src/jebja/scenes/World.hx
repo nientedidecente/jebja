@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import jebja.config.Strings;
 import haxe.Timer;
 import jebja.entities.Wind;
 import h2d.Camera;
@@ -31,7 +32,7 @@ class World extends BaseScene {
 		player.x = bg.width * .5;
 		player.y = bg.height * .5;
 
-		var tips = UiHelper.addTips('[Enter] to Restart\n[SPACE] to Toggle Stailsail\n[S] To open Spinnaker\n[-] To show Debug\n[Q] To Quit', this);
+		var tips = UiHelper.addTips(Strings.COMMANDS, this);
 		Timer.delay(function() {
 			tips.remove();
 		}, 6000);
