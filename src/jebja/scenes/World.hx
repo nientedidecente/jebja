@@ -1,5 +1,7 @@
 package jebja.scenes;
 
+import jebja.libs.Geom;
+import jebja.libs.Randomizer;
 import jebja.config.Strings;
 import haxe.Timer;
 import jebja.entities.Wind;
@@ -36,6 +38,8 @@ class World extends BaseScene {
 		Timer.delay(function() {
 			tips.remove();
 		}, 6000);
+
+		triggerWindChange();
 	}
 
 	override function update(dt:Float) {
@@ -63,5 +67,18 @@ class World extends BaseScene {
 				onStart();
 			}
 		});
+	}
+
+	function triggerWindChange() {
+		var timeout = Randomizer.int(10, 60) * 1000;
+		var angles = [Geom.ANGLE_180, Geom.ANGLE_135, Geom.ANGLE_90, Geom.ANGLE_45];
+		trace('changing wind in ${timeout}');
+		Timer.delay(function() {
+			var angleIndex = Randomizer.int(0, angles.length);
+			var angle = angles[angleIndex];
+			trace('changing wind to ${angle}');
+			player.setWind(Wind.generate(angle));
+			triggerWindChange();
+		}, timeout);
 	}
 }

@@ -54,6 +54,8 @@ class Player extends Collidable {
 		windIndicator.visible = showWindicator;
 		windIndicator.x = this.x - SIZE;
 		windIndicator.y = this.y - SIZE;
+
+		windIndicator.rotation = hxd.Math.degToRad(Geom.ANGLE_180 - wind.direction);
 	}
 
 	function generateTrace(position:Point, movement:Point, speed:Float) {
@@ -99,15 +101,7 @@ class Player extends Collidable {
 		var totalAcc = this.getTotalAcceleration(dt, turning);
 		currentSpeed = this.getMaxSpeed() - ((this.getMaxSpeed() - currentSpeed) * Math.exp(-totalAcc));
 		#if debug
-		if (Key.isReleased(Key.QWERTY_MINUS)) {
-			showDebug = !showDebug;
-		}
-
-		if (showDebug) {
-			this.printDebugInfo(totalAcc);
-		} else {
-			debugText.text = '';
-		}
+		this.debug(totalAcc);
 		#end
 
 		// Max speed and min speed should be dictated by the wind direction too
@@ -170,5 +164,16 @@ class Player extends Collidable {
 		this.sail = sailType;
 		this.tile = Atlas.instance.get(this.sail).center();
 		this.sailConfig = SailTypes.getConfig(this.sail);
+	}
+
+	function debug(totalAcc) {
+		if (Key.isReleased(Key.QWERTY_MINUS)) {
+			showDebug = !showDebug;
+		}
+		if (showDebug) {
+			this.printDebugInfo(totalAcc);
+		} else {
+			debugText.text = '';
+		}
 	}
 }
