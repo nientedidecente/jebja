@@ -52,8 +52,8 @@ class Player extends Collidable {
 
 	public function updateWindicator() {
 		windIndicator.visible = showWindicator;
-		windIndicator.x = this.x - SIZE;
-		windIndicator.y = this.y - SIZE;
+		windIndicator.x = this.x + (SIZE * 1.5 * movement.x);
+		windIndicator.y = this.y + (SIZE * 1.5 * movement.y);
 
 		windIndicator.rotation = hxd.Math.degToRad(Geom.ANGLE_180 - wind.direction);
 	}
