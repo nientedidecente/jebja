@@ -1,5 +1,6 @@
 package jebja.entities;
 
+import h2d.Graphics;
 import h2d.Bitmap;
 import jebja.libs.Atlas;
 import jebja.libs.Geom;
@@ -23,6 +24,8 @@ class Player extends Collidable {
 	var windIndicator:Bitmap;
 	var showWindicator = true;
 
+	var speedIndicator:Graphics;
+
 	#if debug
 	var showDebug = false;
 	var debugText:Text = null;
@@ -40,6 +43,12 @@ class Player extends Collidable {
 		windIndicator = new Bitmap(Atlas.instance.getRes('wind').toTile(), parent);
 		windIndicator.setScale(.5);
 
+		speedIndicator = new Graphics(parent);
+		speedIndicator.beginFill(0xFFFFFFFF);
+		speedIndicator.drawRect(0, -0.5, SIZE, 1);
+		speedIndicator.endFill();
+		speedIndicator.rotation = -Math.PI;
+
 		#if debug
 		debugText = new h2d.Text(hxd.res.DefaultFont.get(), parent);
 		#end
@@ -56,6 +65,10 @@ class Player extends Collidable {
 		windIndicator.y = this.y + (SIZE * 1.5 * movement.y);
 
 		windIndicator.rotation = hxd.Math.degToRad(Geom.ANGLE_180 - wind.direction);
+
+		speedIndicator.x = this.x;
+		speedIndicator.y = this.y;
+		speedIndicator.rotation = Math.atan2(movement.x, movement.y);
 	}
 
 	function generateTrace(position:Point, movement:Point, speed:Float) {
