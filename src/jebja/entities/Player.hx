@@ -1,5 +1,6 @@
 package jebja.entities;
 
+import jebja.libs.Randomizer;
 import h2d.Graphics;
 import h2d.Bitmap;
 import jebja.libs.Atlas;
@@ -21,9 +22,9 @@ class Player extends Collidable {
 	var movement = new Point(0, 0);
 
 	var wind:Wind;
-	var windIndicator:Bitmap;
-	var showWindicator = true;
 
+	var showIndicators = true;
+	var windIndicator:Bitmap;
 	var speedIndicator:Graphics;
 
 	#if debug
@@ -47,7 +48,6 @@ class Player extends Collidable {
 		speedIndicator.beginFill(0xFFFFFFFF);
 		speedIndicator.drawRect(0, -0.5, SIZE, 1);
 		speedIndicator.endFill();
-		speedIndicator.rotation = -Math.PI;
 
 		#if debug
 		debugText = new h2d.Text(hxd.res.DefaultFont.get(), parent);
@@ -59,16 +59,24 @@ class Player extends Collidable {
 		return this;
 	}
 
-	public function updateWindicator() {
-		windIndicator.visible = showWindicator;
-		windIndicator.x = this.x + (SIZE * 1.5 * movement.x);
-		windIndicator.y = this.y + (SIZE * 1.5 * movement.y);
+	public function updateIndicators() {
+		windIndicator.visible = showIndicators;
+		speedIndicator.visible = showIndicators;
 
-		windIndicator.rotation = hxd.Math.degToRad(Geom.ANGLE_180 - wind.direction);
+		if (showIndicators) {
+			windIndicator.x = this.x + (SIZE * 2 * movement.x);
+			windIndicator.y = this.y + (SIZE * 2 * movement.y);
+			windIndicator.rotation = hxd.Math.degToRad(Geom.ANGLE_180 - wind.direction);
 
-		speedIndicator.x = this.x;
-		speedIndicator.y = this.y;
-		speedIndicator.rotation = Math.atan2(movement.x, movement.y);
+			speedIndicator.clear();
+			speedIndicator.beginFill(0xffffff);
+			speedIndicator.drawRect(0, -0.5, 40 * currentSpeed, 1);
+			speedIndicator.endFill();
+
+			speedIndicator.x = this.x + (SIZE / 2 * movement.x);
+			speedIndicator.y = this.y + (SIZE / 2 * movement.y);
+			speedIndicator.rotation = .5 * Math.PI - Math.atan2(movement.x, movement.y);
+		}
 	}
 
 	function generateTrace(position:Point, movement:Point, speed:Float) {
@@ -80,7 +88,7 @@ class Player extends Collidable {
 
 	override function update(dt:Float) {
 		super.update(dt);
-		this.updateWindicator();
+		this.updateIndicators();
 		var turning = false;
 
 		if (Key.isDown(Key.RIGHT)) {
@@ -104,7 +112,7 @@ class Player extends Collidable {
 
 		// Windicator
 		if (Key.isReleased(Key.W)) {
-			showWindicator = !showWindicator;
+			showIndicators = !showIndicators;
 		}
 
 		this.movement.x = Math.cos((-Math.PI / 2) + this.rotation);
