@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import jebja.entities.Collidable;
 import jebja.libs.Geom;
 import jebja.libs.Randomizer;
 import jebja.config.Strings;
@@ -16,6 +17,8 @@ import jebja.entities.Player;
 class World extends BaseScene {
 	var camera:Camera;
 	var player:Player;
+
+	var buoys = new Array<Buoy>();
 	var gameOver = false;
 
 	override function init() {
@@ -24,9 +27,11 @@ class World extends BaseScene {
 		var bg = UiHelper.addBackground(this, Colours.SEA);
 		camera = new Camera(this);
 		for (i in 0...200) {
-			var enemy = new Buoy(camera);
-			enemy.x = 200 + 200 * (1 * i);
-			enemy.y = -(100 + 200 * (1 * i));
+			var buoy = new Buoy(camera);
+			buoy.x = 200 + 200 * (1 * i);
+			buoy.y = -(100 + 200 * (1 * i));
+
+			buoys.push(buoy);
 		}
 
 		player = new Player(camera, Wind.generate());
@@ -52,6 +57,10 @@ class World extends BaseScene {
 		}
 
 		player.update(dt);
+
+		for (buoy in buoys) {
+			buoy.update(player);
+		}
 
 		camera.viewX = player.x;
 		camera.viewY = player.y;
