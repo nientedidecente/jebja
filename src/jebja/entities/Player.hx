@@ -144,7 +144,7 @@ class Player extends Collidable {
 	}
 
 	function getRelativeAngle():Int {
-		return (Geom.ANGLE_180 - this.wind.direction - Geom.directionAngle(this.rotation));
+		return (Geom.ANGLE_180 - this.wind.direction - Geom.directionAngle(this.rotation)) % Geom.ANGLE_360;
 	}
 
 	function acceleration() {
