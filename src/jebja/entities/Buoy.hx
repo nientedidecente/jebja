@@ -22,6 +22,6 @@ class Buoy extends Bitmap {
 	public function update(player:Player) {
 		var parentPos = new Point(player.x, player.y);
 		var me = new Point(this.x, this.y);
-		this.visible = parentPos.distance(me) < 200 + this.size / 2;
+		this.visible = parentPos.distance(me) < 900 + this.size / 2;
 	}
 }
