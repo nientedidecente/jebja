@@ -3,6 +3,7 @@ package jebja.entities;
 import jebja.libs.Geom;
 
 class Wind {
+	public static final KNOTS = 4.234;
 	public var direction:Int;
 	public var intensity:Float;
 
@@ -15,5 +16,9 @@ class Wind {
 		direction = direction == null ? Geom.ANGLE_180 : direction;
 		intensity = intensity == null ? 1. : intensity;
 		return new Wind(direction, intensity);
+	}
+
+	public function getDirection() {
+		return Geom.getCompass(direction);
 	}
 }

@@ -16,7 +16,8 @@ class Player extends Collidable {
 	static final TRACE_SESITIVITY = .24;
 	static final ROTATION_SPEED = 0.02;
 
-	var currentSpeed:Float;
+	public var currentSpeed:Float;
+
 	var sail:Null<String>;
 	var sailConfig:SailConfig;
 	var movement = new Point(0, 0);
@@ -39,7 +40,7 @@ class Player extends Collidable {
 
 		this.currentSpeed = 0;
 		this.collider = new Circle(this.x, this.y, tile.width * .5);
-		this.rotation = -Math.PI / 2;
+		this.rotation = Math.PI / 2;
 		windIndicator = new Bitmap(Atlas.instance.getRes('wind').toTile(), parent);
 		windIndicator.setScale(.5);
 
@@ -90,11 +91,11 @@ class Player extends Collidable {
 		}
 
 		// opening spinnaker
-		if (Key.isReleased(Key.SPACE)) {
+		if (Key.isReleased(Key.DOWN)) {
 			this.setSail(SailTypes.SPINNAKER);
 		}
 
-		// Windicator
+		// Indicator
 		if (Key.isReleased(Key.W)) {
 			showIndicators = !showIndicators;
 		}
@@ -157,7 +158,7 @@ class Player extends Collidable {
 	}
 
 	function getMaxSpeed() {
-		return SailTypes.getMaxSpeed(this.sailConfig, this.getRelativeAngle());
+		return SailTypes.getMaxSpeed(this.sailConfig, this.getRelativeAngle()) * wind.intensity;
 	}
 
 	function toggleSail() {

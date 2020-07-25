@@ -1,6 +1,6 @@
 package jebja.scenes;
 
-import jebja.entities.Collidable;
+import h2d.Text;
 import jebja.libs.Geom;
 import jebja.libs.Randomizer;
 import jebja.config.Strings;
@@ -17,9 +17,14 @@ import jebja.entities.Player;
 class World extends BaseScene {
 	var camera:Camera;
 	var player:Player;
+	var wind:Wind;
 
 	var buoys = new Array<Buoy>();
 	var gameOver = false;
+
+	var showInfo = true;
+	var speedInfo:Text;
+	var windInfo:Text;
 
 	override function init() {
 		super.init();
@@ -33,8 +38,8 @@ class World extends BaseScene {
 
 			buoys.push(buoy);
 		}
-
-		player = new Player(camera, Wind.generate());
+		wind = Wind.generate();
+		player = new Player(camera, wind);
 
 		player.x = bg.width * .5;
 		player.y = bg.height * .5;
@@ -44,6 +49,12 @@ class World extends BaseScene {
 			tips.remove();
 		}, 6000);
 
+		speedInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
+		windInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
+		windInfo.x = 0;
+		windInfo.y = 0;
+		speedInfo.x = 0;
+		speedInfo.y = this.height - 70;
 		triggerWindChange();
 	}
 
@@ -64,6 +75,22 @@ class World extends BaseScene {
 
 		camera.viewX = player.x;
 		camera.viewY = player.y;
+
+		updateInfo();
+
+		// Indicator
+		if (Key.isReleased(Key.SPACE)) {
+			showInfo = !showInfo;
+		}
+	}
+
+	function updateInfo() {
+		speedInfo.visible = showInfo;
+		windInfo.visible = showInfo;
+		if (showInfo) {
+			windInfo.text = 'W: ${wind.getDirection()} ${Geom.toFixed(wind.intensity * Wind.KNOTS)} kn';
+			speedInfo.text = 'H: ${Geom.getHeading(player.rotation)} (deg)\nV: ${Geom.toFixed(player.currentSpeed * wind.intensity * Wind.KNOTS)} kn';
+		}
 	}
 
 	public function registerHandlers(onQuit:Void->Void, onStart:Void->Void) {
@@ -85,8 +112,10 @@ class World extends BaseScene {
 		Timer.delay(function() {
 			var angleIndex = Randomizer.int(0, angles.length);
 			var angle = angles[angleIndex];
-			trace('changing wind to ${angle}');
-			player.setWind(Wind.generate(angle));
+			var int = Randomizer.int(10, 15) / 10.;
+			trace('changing wind to ${angle} ${int}');
+			wind = Wind.generate(angle, int);
+			player.setWind(wind);
 			triggerWindChange();
 		}, timeout);
 	}

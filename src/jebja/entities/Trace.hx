@@ -36,7 +36,7 @@ class Trace {
 	}
 
 	public static function getOrigin(position:Point, movement:Point):Point {
-		var spacing = (Player.SIZE / 2) + 1;
+		var spacing = (Player.SIZE / 2) + 3;
 		var x = position.x + (-1 * movement.x * spacing);
 		var y = position.y + (-1 * movement.y * spacing);
 		return new Point(x, y);

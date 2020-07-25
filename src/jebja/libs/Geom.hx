@@ -5,7 +5,7 @@ import hxd.Math;
 class Geom {
 	public static final ANGLE_SENSITIVITY = 3;
 	public static final ANGLE_45 = 45;
-	public static final ANGLE_90 = 95;
+	public static final ANGLE_90 = 90;
 	public static final ANGLE_135 = 135;
 	public static final ANGLE_180 = 180;
 	public static final ANGLE_225 = 225;
@@ -67,5 +67,35 @@ class Geom {
 		}
 
 		return 0;
+	}
+
+	public static function getHeading(rotation:Float) {
+		var heading = Geom.directionAngle(rotation);
+		return heading < 0 ? (Geom.ANGLE_360 + heading) : heading;
+	}
+
+	public static function getCompass(direction:Int) {
+		switch (direction) {
+			case 0:
+				return 'S';
+			case Geom.ANGLE_45:
+				return 'SW';
+			case Geom.ANGLE_90:
+				return 'W';
+			case Geom.ANGLE_135:
+				return 'NW';
+			case Geom.ANGLE_180:
+				return 'N';
+			case Geom.ANGLE_225:
+				return 'NE';
+			case Geom.ANGLE_270:
+				return 'E';
+			case Geom.ANGLE_315:
+				return 'SE';
+			case Geom.ANGLE_360:
+				return 'S';
+			default:
+				return '${direction}';
+		}
 	}
 }
