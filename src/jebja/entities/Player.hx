@@ -25,7 +25,6 @@ class Player extends Collidable {
 
 	var showIndicators = true;
 	var windIndicator:Bitmap;
-	var speedIndicator:Graphics;
 
 	#if debug
 	var showDebug = false;
@@ -44,11 +43,6 @@ class Player extends Collidable {
 		windIndicator = new Bitmap(Atlas.instance.getRes('wind').toTile(), parent);
 		windIndicator.setScale(.5);
 
-		speedIndicator = new Graphics(parent);
-		speedIndicator.beginFill(0xFFFFFFFF);
-		speedIndicator.drawRect(0, -0.5, SIZE, 1);
-		speedIndicator.endFill();
-
 		#if debug
 		debugText = new h2d.Text(hxd.res.DefaultFont.get(), parent);
 		#end
@@ -61,21 +55,11 @@ class Player extends Collidable {
 
 	public function updateIndicators() {
 		windIndicator.visible = showIndicators;
-		speedIndicator.visible = showIndicators;
 
 		if (showIndicators) {
 			windIndicator.x = this.x + (SIZE * 2 * movement.x);
 			windIndicator.y = this.y + (SIZE * 2 * movement.y);
 			windIndicator.rotation = hxd.Math.degToRad(Geom.ANGLE_180 - wind.direction);
-
-			speedIndicator.clear();
-			speedIndicator.beginFill(0xffffff);
-			speedIndicator.drawRect(0, -0.5, 40 * currentSpeed, 1);
-			speedIndicator.endFill();
-
-			speedIndicator.x = this.x + (SIZE / 2 * movement.x);
-			speedIndicator.y = this.y + (SIZE / 2 * movement.y);
-			speedIndicator.rotation = .5 * Math.PI - Math.atan2(movement.x, movement.y);
 		}
 	}
 
