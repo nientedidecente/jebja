@@ -30,11 +30,11 @@ class Buoy {
 		return this.texture.y = y;
 	}
 
-	public function new(parent:Object) {
+	public function new(parent:Object, colour:Null<Int> = null) {
 		this.size = Randomizer.int(5, 10);
 
 		var cirle = new Graphics(parent);
-		cirle.beginFill(Colours.BUOY);
+		cirle.beginFill(colour == null ? Colours.BUOY : colour);
 		cirle.drawCircle(0, 0, size);
 		cirle.endFill();
 

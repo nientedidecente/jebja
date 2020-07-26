@@ -19,6 +19,7 @@ class World extends BaseScene {
 	var player:Player;
 	var wind:Wind;
 
+	var homeBuoy:Buoy;
 	var buoys = new Array<Buoy>();
 	var gameOver = false;
 
@@ -29,8 +30,13 @@ class World extends BaseScene {
 	override function init() {
 		super.init();
 		gameOver = false;
-		var bg = UiHelper.addBackground(this, Colours.SEA);
+		UiHelper.addBackground(this, Colours.SEA);
 		camera = new Camera(this);
+		
+		homeBuoy = new Buoy(camera, Colours.BUOY_DARK);
+		homeBuoy.x = 0;
+		homeBuoy.y = 0;
+
 		for (i in 0...200) {
 			var buoy = new Buoy(camera);
 			buoy.x = 200 + 400 * (1 * i);
@@ -40,8 +46,8 @@ class World extends BaseScene {
 		wind = Wind.generate();
 		player = new Player(camera, wind);
 
-		player.x = bg.width * .5;
-		player.y = bg.height * .5;
+		player.x = Player.SIZE;
+		player.y = 0;
 
 		var tips = UiHelper.addTips(Strings.COMMANDS, this);
 		Timer.delay(function() {
