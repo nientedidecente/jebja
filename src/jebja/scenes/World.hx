@@ -24,7 +24,7 @@ class World extends BaseScene {
 
 	var showInfo = true;
 	var speedInfo:Text;
-	var windInfo:Text;
+	var worldInfo:Text;
 
 	override function init() {
 		super.init();
@@ -33,9 +33,8 @@ class World extends BaseScene {
 		camera = new Camera(this);
 		for (i in 0...200) {
 			var buoy = new Buoy(camera);
-			buoy.x = 200 + 200 * (1 * i);
-			buoy.y = -(100 + 200 * (1 * i));
-
+			buoy.x = 200 + 400 * (1 * i);
+			buoy.y = -(100 + 400 * (1 * i));
 			buoys.push(buoy);
 		}
 		wind = Wind.generate();
@@ -50,9 +49,9 @@ class World extends BaseScene {
 		}, 6000);
 
 		speedInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
-		windInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
-		windInfo.x = 0;
-		windInfo.y = 0;
+		worldInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
+		worldInfo.x = 0;
+		worldInfo.y = 0;
 		speedInfo.x = 0;
 		speedInfo.y = this.height - 70;
 		triggerWindChange();
@@ -86,9 +85,9 @@ class World extends BaseScene {
 
 	function updateInfo() {
 		speedInfo.visible = showInfo;
-		windInfo.visible = showInfo;
+		worldInfo.visible = showInfo;
 		if (showInfo) {
-			windInfo.text = 'W: ${wind.getDirection()} ${Geom.toFixed(wind.intensity * Wind.KNOTS)} kn';
+			worldInfo.text = 'W: ${wind.getDirection()} ${Geom.toFixed(wind.intensity * Wind.KNOTS)} kn\nP: ${Geom.toFixed(player.x)}, ${Geom.toFixed(player.y)}';
 			speedInfo.text = 'H: ${Geom.getHeading(player.rotation)} (deg)\nV: ${Geom.toFixed(player.currentSpeed * wind.intensity * Wind.KNOTS)} kn';
 		}
 	}
