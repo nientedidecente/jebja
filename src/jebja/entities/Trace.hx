@@ -9,9 +9,10 @@ import h2d.Particles;
 import h2d.Object;
 
 class Trace {
-	static final LIFE = 5000;
+	static final LIFE = 2500;
 
-	public static function show(x, y, parent:Object, texture:Null<String> = null, mode:PartEmitMode = PartEmitMode.Point, lifespan:Null<Int> = null) {
+	public static function show(x:Float, y:Float, parent:Object, texture:Null<String> = null, mode:PartEmitMode = PartEmitMode.Point,
+			lifespan:Null<Int> = null) {
 		lifespan = lifespan == null ? LIFE : lifespan;
 		var particles = new Particles(parent);
 		var g = new ParticleGroup(particles);
@@ -26,6 +27,7 @@ class Trace {
 		g.emitDist = 10;
 		g.fadeIn = 0;
 		g.fadeOut = 0.9;
+		particles.alpha = .5;
 		particles.x = x;
 		particles.y = y;
 		particles.addGroup(g);

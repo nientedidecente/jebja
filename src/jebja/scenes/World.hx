@@ -1,5 +1,7 @@
 package jebja.scenes;
 
+import h2d.Layers;
+import jebja.entities.Dashboard;
 import h2d.Text;
 import jebja.libs.Geom;
 import jebja.libs.Randomizer;
@@ -32,11 +34,10 @@ class World extends BaseScene {
 		gameOver = false;
 		UiHelper.addBackground(this, Colours.SEA);
 		camera = new Camera(this);
-		
 		homeBuoy = new Buoy(camera, Colours.BUOY_DARK);
 		homeBuoy.x = 0;
 		homeBuoy.y = 0;
-
+		
 		for (i in 0...200) {
 			var buoy = new Buoy(camera);
 			buoy.x = 200 + 400 * (1 * i);

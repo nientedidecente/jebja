@@ -1,7 +1,5 @@
 package jebja.entities;
 
-import jebja.libs.Randomizer;
-import h2d.Graphics;
 import h2d.Bitmap;
 import jebja.libs.Atlas;
 import jebja.libs.Geom;
@@ -17,10 +15,10 @@ class Player extends Collidable {
 	static final ROTATION_SPEED = 0.02;
 
 	public var currentSpeed:Float;
+	public var movement = new Point(0, 0);
 
 	var sail:Null<String>;
 	var sailConfig:SailConfig;
-	var movement = new Point(0, 0);
 
 	var wind:Wind;
 
@@ -67,7 +65,7 @@ class Player extends Collidable {
 	function generateTrace(position:Point, movement:Point, speed:Float) {
 		var origin = Trace.getOrigin(position, movement);
 		if (speed >= TRACE_SESITIVITY) {
-			Trace.show(origin.x, origin.y, this.parent);
+			Trace.show(origin.x, origin.y, parent);
 		}
 	}
 
@@ -99,6 +97,7 @@ class Player extends Collidable {
 		if (Key.isReleased(Key.W)) {
 			showIndicators = !showIndicators;
 		}
+
 
 		this.movement.x = Math.cos((-Math.PI / 2) + this.rotation);
 		this.movement.y = Math.sin((-Math.PI / 2) + this.rotation);
