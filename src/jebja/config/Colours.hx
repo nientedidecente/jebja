@@ -6,5 +6,6 @@ final class Colours {
 	public static final PLAYER = 0x7c7577;
 	
 	public static final BUOY = 0xff9f1c;
+	public static final BUOY_LIGHT = 0xffb551;
 	public static final BUOY_DARK = 0xd96c0d;
 }

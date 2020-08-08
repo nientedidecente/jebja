@@ -98,4 +98,18 @@ class Geom {
 				return '${direction}';
 		}
 	}
+
+	public static function pointOnLine(x1:Float, y1:Float, x2:Float, y2:Float, d = 100) {
+		// need to get and add distance to the equation
+		var m = (y2 - y1) / (x2 - x1);
+		// y = m x + q -> q = y - m x
+		var q = y2 - m * x2;
+
+		var x = x1 + d;
+		var y = m * x + q;
+		return {
+			x: x,
+			y: y
+		}
+	}
 }
