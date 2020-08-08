@@ -19,9 +19,10 @@ class TargetBuoy extends Buoy {
 	override public function update(player:Player) {
 		var parentPos = new Point(player.x, player.y);
 		var me = new Point(this.x, this.y);
-		var inView = parentPos.distance(me) < 900 + this.size / 2;
+		var distance = parentPos.distance(me);
+		var inView = distance < 900 + this.size / 2;
 
-		var pos = Geom.pointOnLine(player.x, player.y, x, y, 200);
+		var pos = Geom.pointOnLine(player.x, player.y, x, y, distance, 200);
 		this.indicator.x = pos.x;
 		this.indicator.y = pos.y;
 
