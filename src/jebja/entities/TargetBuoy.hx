@@ -14,7 +14,7 @@ class TargetBuoy extends Buoy {
 	public function new(parent:Object, colour:Null<Int> = null) {
 		super(parent, Colours.BUOY_LIGHT);
 
-		indicator = new Bitmap(Atlas.instance.getRes('target').toTile(), parent);
+		indicator = new Bitmap(Atlas.instance.getRes('target').toTile().center(), parent);
 		indicator.scale(.5);
 	}
 
