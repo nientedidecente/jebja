@@ -1,5 +1,6 @@
 package jebja.libs;
 
+import h2d.col.Point;
 import hxd.Math;
 
 class Geom {
@@ -99,12 +100,9 @@ class Geom {
 		}
 	}
 
-	public static function pointOnLine(x1:Float, y1:Float, x2:Float, y2:Float, D:Float, d = 100) {
+	public static function pointOnLine(x1:Float, y1:Float, x2:Float, y2:Float, D:Float, d:Float) {
 		var x = x1 + ((d / D) * (x2 - x1));
 		var y = y1 + ((d / D) * (y2 - y1));
-		return {
-			x: x,
-			y: y
-		}
+		return new Point(x, y);
 	}
 }
