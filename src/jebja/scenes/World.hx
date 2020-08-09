@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import h3d.parts.Data.Randomized;
 import jebja.entities.TargetBuoy;
 import h2d.Layers;
 import jebja.entities.Dashboard;
@@ -24,7 +25,6 @@ class World extends BaseScene {
 
 	var homeBuoy:Buoy;
 	var targetBuoy:TargetBuoy;
-	var buoys = new Array<Buoy>();
 	var gameOver = false;
 
 	var showInfo = true;
@@ -40,16 +40,9 @@ class World extends BaseScene {
 		homeBuoy.x = 0;
 		homeBuoy.y = 0;
 
-		for (i in 0...200) {
-			var buoy = new Buoy(camera);
-			buoy.x = 200 + 400 * (1 * i);
-			buoy.y = -(100 + 400 * (1 * i));
-			buoys.push(buoy);
-		}
-
 		targetBuoy = new TargetBuoy(camera);
-		targetBuoy.x = 1000;
-		targetBuoy.y = 1000;
+		targetBuoy.x = Randomizer.int(1, 10) * 1000 * (Randomizer.chance(50) ? 1 : -1);
+		targetBuoy.y = Randomizer.int(1, 10) * 1000 * (Randomizer.chance(50) ? 1 : -1);
 
 		wind = Wind.generate();
 		player = new Player(camera, wind);
@@ -83,10 +76,6 @@ class World extends BaseScene {
 		player.update(dt);
 
 		targetBuoy.update(player);
-
-		for (buoy in buoys) {
-			buoy.update(player);
-		}
 
 		camera.viewX = player.x;
 		camera.viewY = player.y;
