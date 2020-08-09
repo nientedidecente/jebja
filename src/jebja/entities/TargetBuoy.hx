@@ -1,5 +1,7 @@
 package jebja.entities;
 
+import differ.shapes.Circle;
+import differ.shapes.Shape;
 import h2d.Text;
 import jebja.libs.Atlas;
 import jebja.libs.Geom;
@@ -13,6 +15,18 @@ class TargetBuoy extends Buoy {
 	var indicator:Bitmap;
 	var distanceText:Text;
 
+	public var collider:Null<Shape>;
+
+	override function set_x(x:Float):Float {
+		this.collider.x = x;
+		return super.set_x(x);
+	}
+
+	override function set_y(y:Float):Float {
+		this.collider.y = y;
+		return super.set_y(y);
+	}
+
 	public function new(parent:Object, colour:Null<Int> = null) {
 		super(parent, Colours.BUOY_LIGHT);
 
@@ -22,6 +36,8 @@ class TargetBuoy extends Buoy {
 		distanceText = new h2d.Text(hxd.res.DefaultFont.get(), parent);
 		distanceText.textColor = Colours.BUOY_LIGHT;
 		distanceText.textAlign = Align.Center;
+
+		collider = new Circle(1000, 1000, size);
 	}
 
 	override public function update(player:Player) {
@@ -31,7 +47,7 @@ class TargetBuoy extends Buoy {
 		var inView = distance < 900 + this.size / 2;
 		texture.visible = inView;
 		var pos = Geom.pointOnLine(player.x, player.y, x, y, distance, Math.min(400.0, distance / 2));
-		
+
 		indicator.x = pos.x;
 		indicator.y = pos.y;
 		var showIndicator = pos.distance(me) > 180;

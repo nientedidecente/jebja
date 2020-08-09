@@ -1,9 +1,7 @@
 package jebja.scenes;
 
-import h3d.parts.Data.Randomized;
+import differ.Collision;
 import jebja.entities.TargetBuoy;
-import h2d.Layers;
-import jebja.entities.Dashboard;
 import h2d.Text;
 import jebja.libs.Geom;
 import jebja.libs.Randomizer;
@@ -85,6 +83,11 @@ class World extends BaseScene {
 		// Indicator
 		if (Key.isReleased(Key.SPACE)) {
 			showInfo = !showInfo;
+		}
+
+		var colliding = Collision.shapeWithShape(player.collider, targetBuoy.collider);
+		if (colliding != null) {
+			trace("GOT IT", colliding);
 		}
 	}
 

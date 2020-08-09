@@ -1,5 +1,6 @@
 package jebja.entities;
 
+import hxd.Math;
 import h2d.Object;
 import h2d.Bitmap;
 import h2d.Tile;
@@ -50,5 +51,6 @@ class Collidable extends Bitmap {
 	public function update(dt:Float) {
 		this.collider.x = this.x;
 		this.collider.y = this.y;
+		this.collider.rotation = Math.radToDeg(rotation);
 	}
 }

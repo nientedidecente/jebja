@@ -7,7 +7,7 @@ import h2d.Text;
 import h2d.Object;
 import h2d.col.Point;
 import hxd.Key;
-import differ.shapes.Circle;
+import differ.shapes.Polygon;
 
 class Player extends Collidable {
 	public static final SIZE = 64;
@@ -37,7 +37,7 @@ class Player extends Collidable {
 		this.wind = wind;
 
 		this.currentSpeed = 0;
-		this.collider = new Circle(this.x, this.y, tile.width * .5);
+		this.collider = Polygon.rectangle(this.x, this.y, tile.width, tile.height);
 		this.rotation = Math.PI / 2;
 		windIndicator = new Bitmap(Atlas.instance.getRes('wind').toTile(), parent);
 		windIndicator.setScale(.5);
