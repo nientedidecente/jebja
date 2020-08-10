@@ -1,5 +1,6 @@
 package jebja.entities;
 
+import jebja.libs.Randomizer;
 import differ.shapes.Circle;
 import differ.shapes.Shape;
 import h2d.Text;
@@ -46,7 +47,7 @@ class TargetBuoy extends Buoy {
 		var distance = parentPos.distance(me);
 		var inView = distance < 900 + this.size / 2;
 		texture.visible = inView;
-		var pos = Geom.pointOnLine(player.x, player.y, x, y, distance, Math.min(400.0, distance / 2));
+		var pos = Geom.pointOnLine(player.x, player.y, x, y, distance, Math.min(300.0, distance / 2));
 
 		indicator.x = pos.x;
 		indicator.y = pos.y;
@@ -57,5 +58,19 @@ class TargetBuoy extends Buoy {
 		distanceText.x = pos.x - 20;
 		distanceText.y = pos.y - 20;
 		distanceText.visible = showIndicator;
+	}
+
+	public function destroy() {
+		indicator.remove();
+		collider.destroy();
+		texture.remove();
+	}
+
+	public static function generate(parent) {
+		var target = new TargetBuoy(parent);
+		target.x = Randomizer.int(1, 10) * 1000 * (Randomizer.chance(50) ? 1 : -1);
+		target.y = Randomizer.int(1, 10) * 1000 * (Randomizer.chance(50) ? 1 : -1);
+
+		return target;
 	}
 }

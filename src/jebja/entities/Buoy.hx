@@ -46,4 +46,12 @@ class Buoy {
 		var me = new Point(this.x, this.y);
 		this.texture.visible = parentPos.distance(me) < 900 + this.size / 2;
 	}
+
+	public static function drop(parent, x, y) {
+		var buoy = new Buoy(parent);
+		buoy.x = x;
+		buoy.y = y;
+
+		return buoy;
+	}
 }

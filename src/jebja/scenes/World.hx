@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import h2d.col.Point;
 import differ.Collision;
 import jebja.entities.TargetBuoy;
 import h2d.Text;
@@ -22,7 +23,8 @@ class World extends BaseScene {
 	var wind:Wind;
 
 	var homeBuoy:Buoy;
-	var targetBuoy:TargetBuoy;
+	var visitedBuoys:Array<Buoy>;
+	var targetBuoy:Null<TargetBuoy>;
 	var gameOver = false;
 
 	var showInfo = true;
@@ -32,15 +34,14 @@ class World extends BaseScene {
 	override function init() {
 		super.init();
 		gameOver = false;
+		visitedBuoys = new Array<Buoy>();
 		UiHelper.addBackground(this, Colours.SEA);
 		camera = new Camera(this);
 		homeBuoy = new Buoy(camera, Colours.BUOY_DARK);
 		homeBuoy.x = 0;
 		homeBuoy.y = 0;
 
-		targetBuoy = new TargetBuoy(camera);
-		targetBuoy.x = Randomizer.int(1, 10) * 1000 * (Randomizer.chance(50) ? 1 : -1);
-		targetBuoy.y = Randomizer.int(1, 10) * 1000 * (Randomizer.chance(50) ? 1 : -1);
+		targetBuoy = TargetBuoy.generate(camera);
 
 		wind = Wind.generate();
 		player = new Player(camera, wind);
@@ -73,7 +74,19 @@ class World extends BaseScene {
 
 		player.update(dt);
 
-		targetBuoy.update(player);
+		if (targetBuoy != null) {
+			targetBuoy.update(player);
+
+			if (Collision.shapeWithShape(player.collider, targetBuoy.collider) != null) {
+				visitedBuoys.push(Buoy.drop(camera, targetBuoy.x, targetBuoy.y));
+				targetBuoy.destroy();
+				targetBuoy = TargetBuoy.generate(camera);
+			}
+		}
+
+		for (buoy in visitedBuoys) {
+			buoy.update(player);
+		}
 
 		camera.viewX = player.x;
 		camera.viewY = player.y;
@@ -83,11 +96,6 @@ class World extends BaseScene {
 		// Indicator
 		if (Key.isReleased(Key.SPACE)) {
 			showInfo = !showInfo;
-		}
-
-		var colliding = Collision.shapeWithShape(player.collider, targetBuoy.collider);
-		if (colliding != null) {
-			trace("GOT IT", colliding);
 		}
 	}
 
