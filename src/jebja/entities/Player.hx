@@ -17,6 +17,8 @@ class Player extends Collidable {
 	public var currentSpeed:Float;
 	public var movement = new Point(0, 0);
 
+	var seaLayer:Object;
+
 	var sail:Null<String>;
 	var sailConfig:SailConfig;
 
@@ -30,11 +32,12 @@ class Player extends Collidable {
 	var debugText:Text = null;
 	#end
 
-	public function new(parent:Object, wind:Wind) {
+	public function new(parent:Object, seaLayer:Object, wind:Wind) {
 		var tile = Atlas.instance.get(SailTypes.NONE).center();
 		super(parent, tile);
 		this.setSail(SailTypes.NONE);
 		this.wind = wind;
+		this.seaLayer = seaLayer;
 
 		this.currentSpeed = 0;
 		this.collider = Polygon.rectangle(this.x, this.y, tile.width, tile.height);
@@ -65,7 +68,7 @@ class Player extends Collidable {
 	function generateTrace(position:Point, movement:Point, speed:Float) {
 		var origin = Trace.getOrigin(position, movement);
 		if (speed >= TRACE_SESITIVITY) {
-			Trace.show(origin.x, origin.y, parent);
+			Trace.show(origin.x, origin.y, seaLayer);
 		}
 	}
 
@@ -97,7 +100,6 @@ class Player extends Collidable {
 		if (Key.isReleased(Key.W)) {
 			showIndicators = !showIndicators;
 		}
-
 
 		this.movement.x = Math.cos((-Math.PI / 2) + this.rotation);
 		this.movement.y = Math.sin((-Math.PI / 2) + this.rotation);

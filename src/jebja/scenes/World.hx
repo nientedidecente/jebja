@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import h2d.Object;
 import h2d.col.Point;
 import differ.Collision;
 import jebja.entities.TargetBuoy;
@@ -21,6 +22,7 @@ class World extends BaseScene {
 	var camera:Camera;
 	var player:Player;
 	var wind:Wind;
+	var seaLayer:Object;
 
 	var homeBuoy:Buoy;
 	var visitedBuoys:Array<Buoy>;
@@ -36,15 +38,17 @@ class World extends BaseScene {
 		gameOver = false;
 		visitedBuoys = new Array<Buoy>();
 		UiHelper.addBackground(this, Colours.SEA);
+		seaLayer = new Object(this);
 		camera = new Camera(this);
-		homeBuoy = new Buoy(camera, Colours.BUOY_DARK);
+
+		homeBuoy = new Buoy(seaLayer, Colours.BUOY_DARK);
 		homeBuoy.x = 0;
 		homeBuoy.y = 0;
 
-		targetBuoy = TargetBuoy.generate(camera);
+		targetBuoy = TargetBuoy.generate(seaLayer);
 
 		wind = Wind.generate();
-		player = new Player(camera, wind);
+		player = new Player(camera, seaLayer, wind);
 
 		player.x = Player.SIZE;
 		player.y = 0;
@@ -90,6 +94,8 @@ class World extends BaseScene {
 
 		camera.viewX = player.x;
 		camera.viewY = player.y;
+		seaLayer.x = camera.x;
+		seaLayer.y = camera.y;
 
 		updateInfo();
 
