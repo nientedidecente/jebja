@@ -22,10 +22,11 @@ class Game extends App {
 		Res.initEmbed();
 		#end
 		
-		new Game();
+		new Game(); 
 	}
 
 	override function init() {
+		hxd.Window.getInstance().vsync = true;
 		mainMenu();
 	}
 
