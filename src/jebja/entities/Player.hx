@@ -12,7 +12,7 @@ import differ.shapes.Polygon;
 class Player extends Collidable {
 	public static final SIZE = 64;
 	static final TRACE_SESITIVITY = .24;
-	static final ROTATION_SPEED = 0.02;
+	static final ROTATION_SPEED = 1;
 
 	public var currentSpeed:Float;
 	public var movement = new Point(0, 0);
@@ -78,11 +78,11 @@ class Player extends Collidable {
 		var turning = false;
 
 		if (Key.isDown(Key.RIGHT)) {
-			this.rotation += ROTATION_SPEED;
+			this.rotation += ROTATION_SPEED * dt;
 			turning = true;
 		}
 		if (Key.isDown(Key.LEFT)) {
-			this.rotation -= ROTATION_SPEED;
+			this.rotation -= ROTATION_SPEED * dt;
 			turning = true;
 		}
 
