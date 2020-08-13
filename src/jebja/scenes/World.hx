@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import jebja.entities.Dashboard;
 import h2d.Object;
 import h2d.col.Point;
 import differ.Collision;
@@ -22,7 +23,7 @@ class World extends BaseScene {
 	var camera:Camera;
 	var player:Player;
 	var wind:Wind;
-	var seaLayer:Object;
+	var layers:Array<Object>;
 
 	var homeBuoy:Buoy;
 	var visitedBuoys:Array<Buoy>;
@@ -33,22 +34,31 @@ class World extends BaseScene {
 	var speedInfo:Text;
 	var worldInfo:Text;
 
+	var dashboard:Dashboard;
+
 	override function init() {
 		super.init();
 		gameOver = false;
+		layers = new Array<Object>();
 		visitedBuoys = new Array<Buoy>();
 		UiHelper.addBackground(this, Colours.SEA);
-		seaLayer = new Object(this);
+		var background = new Object(this);
+		layers.push(background);
 		camera = new Camera(this);
+		var foreground = new Object(this);
+		layers.push(foreground);
 
-		homeBuoy = new Buoy(seaLayer, Colours.BUOY_DARK);
+		dashboard = new Dashboard(foreground);
+		dashboard.visible = false;
+
+		homeBuoy = new Buoy(background, Colours.BUOY_DARK);
 		homeBuoy.x = 0;
 		homeBuoy.y = 0;
 
-		targetBuoy = TargetBuoy.generate(seaLayer);
+		targetBuoy = TargetBuoy.generate(background);
 
 		wind = Wind.generate();
-		player = new Player(camera, seaLayer, wind);
+		player = new Player(camera, background, wind);
 
 		player.x = Player.SIZE;
 		player.y = 0;
@@ -58,12 +68,7 @@ class World extends BaseScene {
 			tips.remove();
 		}, 6000);
 
-		speedInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
-		worldInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
-		worldInfo.x = 0;
-		worldInfo.y = 0;
-		speedInfo.x = 0;
-		speedInfo.y = this.height - 70;
+		initTextIndicators();
 		triggerWindChange();
 	}
 
@@ -92,16 +97,29 @@ class World extends BaseScene {
 			buoy.update(player);
 		}
 
+		dashboard.update(player);
+
 		camera.viewX = player.x;
 		camera.viewY = player.y;
-		seaLayer.x = camera.x;
-		seaLayer.y = camera.y;
+		updateLayers(camera.x, camera.y);
 
 		updateInfo();
 
 		// Indicator
 		if (Key.isReleased(Key.SPACE)) {
 			showInfo = !showInfo;
+		}
+		
+		// Dashboard
+		if (Key.isReleased(Key.D)) {
+			dashboard.visible = !dashboard.visible;
+		}
+	}
+
+	function updateLayers(x:Float, y:Float) {
+		for (layer in layers) {
+			layer.x = x;
+			layer.y = y;
 		}
 	}
 
@@ -139,5 +157,14 @@ class World extends BaseScene {
 			player.setWind(wind);
 			triggerWindChange();
 		}, timeout);
+	}
+
+	function initTextIndicators() {
+		speedInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
+		worldInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
+		worldInfo.x = 0;
+		worldInfo.y = 0;
+		speedInfo.x = 0;
+		speedInfo.y = this.height - 70;
 	}
 }

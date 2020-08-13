@@ -49,7 +49,7 @@ class Dashboard {
 	}
 
 	public function update(player:Player) {
-		x = player.x + (300 * player.movement.x);
-		y = player.y + (300 * player.movement.y);
+		x = player.x + 50;
+		y = player.y - 200;
 	}
 }

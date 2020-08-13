@@ -9,7 +9,7 @@ import h2d.Particles;
 import h2d.Object;
 
 class Trace {
-	static final LIFE = 4000;
+	static final LIFE = 6000;
 
 	public static function show(x:Float, y:Float, parent:Object, texture:Null<String> = null, mode:PartEmitMode = PartEmitMode.Point,
 			lifespan:Null<Int> = null) {
