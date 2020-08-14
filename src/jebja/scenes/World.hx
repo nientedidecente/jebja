@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import h3d.Vector;
 import jebja.entities.Dashboard;
 import h2d.Object;
 import h2d.col.Point;
@@ -109,7 +110,7 @@ class World extends BaseScene {
 		if (Key.isReleased(Key.SPACE)) {
 			showInfo = !showInfo;
 		}
-		
+
 		// Dashboard
 		if (Key.isReleased(Key.D)) {
 			dashboard.visible = !dashboard.visible;
@@ -148,6 +149,13 @@ class World extends BaseScene {
 		var timeout = Randomizer.int(10, 60) * 1000;
 		var angles = [Geom.ANGLE_180, Geom.ANGLE_135, Geom.ANGLE_90, Geom.ANGLE_45];
 		trace('changing wind in ${timeout}');
+		var reportWindChanged = function() {
+			var initialColour = 0xffffff;
+			worldInfo.textColor = 0xff0000;
+			Timer.delay(function() {
+				worldInfo.textColor = initialColour;
+			}, 3000);
+		}
 		Timer.delay(function() {
 			var angleIndex = Randomizer.int(0, angles.length);
 			var angle = angles[angleIndex];
@@ -155,6 +163,7 @@ class World extends BaseScene {
 			trace('changing wind to ${angle} ${int}');
 			wind = Wind.generate(angle, int);
 			player.setWind(wind);
+			reportWindChanged();
 			triggerWindChange();
 		}, timeout);
 	}

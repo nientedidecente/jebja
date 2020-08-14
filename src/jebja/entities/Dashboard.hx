@@ -1,10 +1,12 @@
 package jebja.entities;
 
+import h3d.Vector;
+import h2d.Text;
 import h2d.Graphics;
 import h2d.Object;
 
 class Dashboard {
-	static final SIZE = {w: 300, h: 500};
+	static final SIZE = {w: 500, h: 200};
 
 	var parent:Object;
 
@@ -40,16 +42,20 @@ class Dashboard {
 	public function new(parent:Object) {
 		this.parent = parent;
 		var wrapper = new Graphics(parent);
-		wrapper.beginFill(0x000000);
+		wrapper.beginFill(0xffffff);
 		wrapper.drawRect(0, 0, SIZE.w, SIZE.h);
 		wrapper.endFill();
 		wrapper.visible = false;
 		this.texture = wrapper;
 		this.texture.tile = this.texture.tile.center();
+		var text = new Text(hxd.res.DefaultFont.get(), this.texture);
+		text.scale(2);
+		text.color = new Vector(0, 0, 0);
+		text.text = "Dashboard";
 	}
 
 	public function update(player:Player) {
-		x = player.x + 50;
-		y = player.y - 200;
+		x = player.x - SIZE.w / 2;
+		y = player.y + SIZE.h;
 	}
 }
