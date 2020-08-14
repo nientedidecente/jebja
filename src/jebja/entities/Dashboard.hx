@@ -1,6 +1,5 @@
 package jebja.entities;
 
-import h3d.Vector;
 import h2d.Text;
 import h2d.Graphics;
 import h2d.Object;
@@ -50,7 +49,7 @@ class Dashboard {
 		this.texture.tile = this.texture.tile.center();
 		var text = new Text(hxd.res.DefaultFont.get(), this.texture);
 		text.scale(2);
-		text.color = new Vector(0, 0, 0);
+		text.textColor = 0x000000;
 		text.text = "Dashboard";
 	}
 
