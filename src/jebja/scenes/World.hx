@@ -34,6 +34,7 @@ class World extends BaseScene {
 	var showInfo = true;
 	var speedInfo:Text;
 	var worldInfo:Text;
+	var windInfo:Text;
 
 	var dashboard:Dashboard;
 
@@ -88,9 +89,9 @@ class World extends BaseScene {
 			targetBuoy.update(player);
 
 			if (Collision.shapeWithShape(player.collider, targetBuoy.collider) != null) {
-				visitedBuoys.push(Buoy.drop(camera, targetBuoy.x, targetBuoy.y));
+				visitedBuoys.push(Buoy.drop(getBackground(), targetBuoy.x, targetBuoy.y));
 				targetBuoy.destroy();
-				targetBuoy = TargetBuoy.generate(camera);
+				targetBuoy = TargetBuoy.generate(getBackground());
 			}
 		}
 
@@ -127,8 +128,10 @@ class World extends BaseScene {
 	function updateInfo() {
 		speedInfo.visible = showInfo;
 		worldInfo.visible = showInfo;
+		windInfo.visible = showInfo;
 		if (showInfo) {
-			worldInfo.text = 'W: ${wind.getDirection()} ${Geom.toFixed(wind.intensity * Wind.KNOTS)} kn\nP: ${Geom.toFixed(player.x)}, ${Geom.toFixed(player.y)}';
+			windInfo.text = 'W: ${wind.getDirection()} ${Geom.toFixed(wind.intensity * Wind.KNOTS)} kn';
+			worldInfo.text = 'P: ${Geom.toFixed(player.x)}, ${Geom.toFixed(player.y)}';
 			speedInfo.text = 'H: ${Geom.getHeading(player.rotation)} (deg)\nV: ${Geom.toFixed(player.currentSpeed * wind.intensity * Wind.KNOTS)} kn';
 		}
 	}
@@ -151,9 +154,9 @@ class World extends BaseScene {
 		trace('changing wind in ${timeout}');
 		var reportWindChanged = function() {
 			var initialColour = 0xffffff;
-			worldInfo.textColor = 0xff0000;
+			windInfo.textColor = 0xff0000;
 			Timer.delay(function() {
-				worldInfo.textColor = initialColour;
+				windInfo.textColor = initialColour;
 			}, 3000);
 		}
 		Timer.delay(function() {
@@ -170,10 +173,21 @@ class World extends BaseScene {
 
 	function initTextIndicators() {
 		speedInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
+		windInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
 		worldInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
-		worldInfo.x = 0;
-		worldInfo.y = 0;
-		speedInfo.x = 0;
+		windInfo.x = 5;
+		worldInfo.x = 5;
+		windInfo.y = 0;
+		worldInfo.y = 30;
+		speedInfo.x = 5;
 		speedInfo.y = this.height - 70;
+	}
+
+	function getBackground() {
+		return layers[0];
+	}
+
+	function getForeground() {
+		return layers[1];
 	}
 }
