@@ -38,7 +38,7 @@ class TargetBuoy extends Buoy {
 		distanceText.textColor = Colours.BUOY_LIGHT;
 		distanceText.textAlign = Align.Center;
 
-		collider = new Circle(1000, 1000, size);
+		collider = new Circle(1000, 1000, size * 2);
 	}
 
 	override public function update(player:Player) {
