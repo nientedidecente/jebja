@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import jebja.entities.Waves;
 import h3d.Vector;
 import jebja.entities.Dashboard;
 import h2d.Object;
@@ -72,6 +73,7 @@ class World extends BaseScene {
 
 		initTextIndicators();
 		triggerWindChange();
+		triggerWaves();
 	}
 
 	override function update(dt:Float) {
@@ -168,6 +170,14 @@ class World extends BaseScene {
 			player.setWind(wind);
 			reportWindChanged();
 			triggerWindChange();
+		}, timeout);
+	}
+
+	function triggerWaves() {
+		var timeout = Randomizer.int(1, 2) * 1000;
+		Waves.generate(player.x, player.y, getBackground());
+		Timer.delay(function() {
+			triggerWaves();
 		}, timeout);
 	}
 

@@ -2,6 +2,8 @@ package jebja.config;
 
 final class Colours {
 	public static final SEA = 0x76b6c4;
+	public static final WAVE = 0xe1eff2;
+	public static final WAVE_DARK = 0x047a94;
 	public static final TRAIL = 0xdef3f6;
 	public static final PLAYER = 0x7c7577;
 	
