@@ -8,18 +8,14 @@ import h2d.Particles;
 import h2d.Object;
 
 class Waves {
-	static final LIFE_MIN = 2;
-	static final LIFE_MAX = 10;
-
 	static final DISTANCE_MAX = 100;
 
-	public static function generate(x:Float, y:Float, parent:Object) {
-		var lifespan = Randomizer.int(LIFE_MIN, LIFE_MAX) * 1000;
+	public static function generate(x:Float, y:Float, parent:Object, lifespan:Int) {
 		var particles = new Particles(parent);
 		var g = new ParticleGroup(particles);
-		g.texture = Tile.fromColor(Colours.WAVE).getTexture();
-		g.size = 2.5;
-		g.nparts = 50;
+		g.texture = Tile.fromColor(Colours.WAVE, 1, 100).getTexture();
+		g.size = 4;
+		g.nparts = 60;
 		g.sizeRand = .2;
 		g.life = 2;
 		g.speed = 0;
@@ -35,6 +31,6 @@ class Waves {
 		Timer.delay(function() {
 			particles.removeGroup(g);
 			particles.remove();
-		}, lifespan);
+		}, lifespan + 500);
 	}
 }

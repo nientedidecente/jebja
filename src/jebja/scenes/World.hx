@@ -39,8 +39,11 @@ class World extends BaseScene {
 
 	var dashboard:Dashboard;
 
+	var screen:Point;
+
 	override function init() {
 		super.init();
+		screen = new Point(this.height, this.width);
 		gameOver = false;
 		layers = new Array<Object>();
 		visitedBuoys = new Array<Buoy>();
@@ -153,7 +156,6 @@ class World extends BaseScene {
 	function triggerWindChange() {
 		var timeout = Randomizer.int(10, 60) * 1000;
 		var angles = [Geom.ANGLE_180, Geom.ANGLE_135, Geom.ANGLE_90, Geom.ANGLE_45];
-		trace('changing wind in ${timeout}');
 		var reportWindChanged = function() {
 			var initialColour = 0xffffff;
 			windInfo.textColor = 0xff0000;
@@ -165,7 +167,6 @@ class World extends BaseScene {
 			var angleIndex = Randomizer.int(0, angles.length);
 			var angle = angles[angleIndex];
 			var int = Randomizer.int(10, 15) / 10.;
-			trace('changing wind to ${angle} ${int}');
 			wind = Wind.generate(angle, int);
 			player.setWind(wind);
 			reportWindChanged();
@@ -174,8 +175,8 @@ class World extends BaseScene {
 	}
 
 	function triggerWaves() {
-		var timeout = Randomizer.int(1, 2) * 1000;
-		Waves.generate(player.x, player.y, getBackground());
+		var timeout = 2500;
+		Waves.generate(player.x, player.y, getBackground(), timeout);
 		Timer.delay(function() {
 			triggerWaves();
 		}, timeout);
