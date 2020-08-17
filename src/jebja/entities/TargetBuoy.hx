@@ -13,6 +13,10 @@ import jebja.config.Colours;
 import hxd.Math;
 
 class TargetBuoy extends Buoy {
+	static final MIN_DISTANCE = 1;
+	static final MAX_DISTANCE = 3;
+	static final DISTANCE_MULTIPLAYER = 1000;
+
 	var indicator:Bitmap;
 	var distanceText:Text;
 
@@ -68,8 +72,8 @@ class TargetBuoy extends Buoy {
 
 	public static function generate(parent) {
 		var target = new TargetBuoy(parent);
-		target.x = Randomizer.int(1, 10) * 1000 * (Randomizer.chance(50) ? 1 : -1);
-		target.y = Randomizer.int(1, 10) * 1000 * (Randomizer.chance(50) ? 1 : -1);
+		target.x = Randomizer.intZ(MIN_DISTANCE, MAX_DISTANCE) * DISTANCE_MULTIPLAYER;
+		target.y = Randomizer.intZ(MIN_DISTANCE, MAX_DISTANCE) * DISTANCE_MULTIPLAYER;
 
 		return target;
 	}
