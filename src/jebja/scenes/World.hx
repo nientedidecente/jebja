@@ -1,5 +1,7 @@
 package jebja.scenes;
 
+import jebja.entities.course.Track;
+import jebja.entities.Gate;
 import jebja.entities.Waves;
 import h3d.Vector;
 import jebja.entities.Dashboard;
@@ -32,6 +34,10 @@ class World extends BaseScene {
 	var targetBuoy:Null<TargetBuoy>;
 	var gameOver = false;
 
+	var track:Track;
+
+	var gate:Gate;
+
 	var showInfo = true;
 	var speedInfo:Text;
 	var worldInfo:Text;
@@ -61,7 +67,10 @@ class World extends BaseScene {
 		homeBuoy.x = 0;
 		homeBuoy.y = 0;
 
-		targetBuoy = TargetBuoy.generate(background);
+		// targetBuoy = TargetBuoy.generate(background);
+		targetBuoy = null;
+
+		track = new Track(background);
 
 		wind = Wind.generate();
 		player = new Player(camera, background, wind);
@@ -77,6 +86,10 @@ class World extends BaseScene {
 		initTextIndicators();
 		triggerWindChange();
 		triggerWaves();
+
+		gate = new Gate(getBackground(), 100);
+		gate.forcePosition(200, 200);
+		gate.forceRotation(Math.PI / 2);
 	}
 
 	override function update(dt:Float) {
@@ -89,6 +102,10 @@ class World extends BaseScene {
 		}
 
 		player.update(dt);
+
+		track.update(player);
+
+		gate.update(player);
 
 		if (targetBuoy != null) {
 			targetBuoy.update(player);
