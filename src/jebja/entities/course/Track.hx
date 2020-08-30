@@ -10,7 +10,9 @@ import h2d.Bitmap;
 
 class Track {
 	static final INDICATOR_RENDER_DISTANCE = 50;
-	var parent:Object;
+
+	var background:Object;
+	var foreground:Object;
 	var checkpoints:Array<Checkpoint>;
 
 	var nextCheckpoint:Null<Checkpoint>;
@@ -19,18 +21,19 @@ class Track {
 	var indicator:Bitmap;
 	var distanceText:Text;
 
-	public function new(parent:Object) {
-		this.parent = parent;
-		indicator = new Bitmap(Atlas.instance.getRes('target').toTile().center(), parent);
+	public function new(background:Object, foreground:Object) {
+		this.background = background;
+		this.foreground = foreground;
+		indicator = new Bitmap(Atlas.instance.getRes('target').toTile().center(), foreground);
 		indicator.scale(.5);
 
-		distanceText = new h2d.Text(hxd.res.DefaultFont.get(), parent);
+		distanceText = new h2d.Text(hxd.res.DefaultFont.get(), foreground);
 		distanceText.textColor = Colours.BUOY_LIGHT;
 		distanceText.textAlign = Align.Center;
 
 		checkpoints = new Array<Checkpoint>();
-		checkpoints.push(new GateCP(parent, 1000, 1000));
-		checkpoints.push(new GateCP(parent, -800, -800));
+		checkpoints.push(new GateCP(background, 1000, 1000));
+		checkpoints.push(new GateCP(background, -800, -800));
 
 		nextCheckpoint = checkpoints[0];
 	}

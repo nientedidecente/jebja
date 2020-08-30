@@ -70,7 +70,7 @@ class World extends BaseScene {
 		// targetBuoy = TargetBuoy.generate(background);
 		targetBuoy = null;
 
-		track = new Track(background);
+		track = new Track(background, foreground);
 
 		wind = Wind.generate();
 		player = new Player(camera, background, wind);
