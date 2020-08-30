@@ -1,5 +1,6 @@
 package jebja.entities;
 
+import h2d.Graphics;
 import jebja.libs.Randomizer;
 import differ.shapes.Circle;
 import differ.shapes.Shape;
@@ -15,8 +16,9 @@ import hxd.Math;
 class TargetBuoy extends Buoy {
 	static final MIN_DISTANCE = 1;
 	static final MAX_DISTANCE = 3;
-	static final DISTANCE_MULTIPLAYER = 1000;
+	static final DISTANCE_MULTIPLIER = 300;
 
+	var halo:Graphics;
 	var indicator:Bitmap;
 	var distanceText:Text;
 
@@ -24,11 +26,13 @@ class TargetBuoy extends Buoy {
 
 	override function set_x(x:Float):Float {
 		this.collider.x = x;
+		this.halo.x = x;
 		return super.set_x(x);
 	}
 
 	override function set_y(y:Float):Float {
 		this.collider.y = y;
+		this.halo.y = y;
 		return super.set_y(y);
 	}
 
@@ -41,6 +45,10 @@ class TargetBuoy extends Buoy {
 		distanceText = new h2d.Text(hxd.res.DefaultFont.get(), parent);
 		distanceText.textColor = Colours.BUOY_LIGHT;
 		distanceText.textAlign = Align.Center;
+		halo = new Graphics(parent);
+		halo.beginFill(Colours.BUOY_LIGHT, .1);
+		halo.drawCircle(0, 0, size * 4);
+		halo.endFill();
 
 		collider = new Circle(1000, 1000, size * 2);
 	}
@@ -67,13 +75,14 @@ class TargetBuoy extends Buoy {
 	public function destroy() {
 		indicator.remove();
 		collider.destroy();
+		halo.remove();
 		texture.remove();
 	}
 
 	public static function generate(parent) {
 		var target = new TargetBuoy(parent);
-		target.x = Randomizer.intZ(MIN_DISTANCE, MAX_DISTANCE) * DISTANCE_MULTIPLAYER;
-		target.y = Randomizer.intZ(MIN_DISTANCE, MAX_DISTANCE) * DISTANCE_MULTIPLAYER;
+		target.x = Randomizer.intZ(MIN_DISTANCE, MAX_DISTANCE) * DISTANCE_MULTIPLIER;
+		target.y = Randomizer.intZ(MIN_DISTANCE, MAX_DISTANCE) * DISTANCE_MULTIPLIER;
 
 		return target;
 	}
