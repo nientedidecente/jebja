@@ -1,7 +1,6 @@
 package jebja.entities;
 
 import h2d.Graphics;
-import h2d.Bitmap;
 import h2d.col.Point;
 import h2d.Object;
 import jebja.config.Colours;
@@ -30,12 +29,12 @@ class Buoy {
 		return this.texture.y = y;
 	}
 
-	public function new(parent:Object, colour:Null<Int> = null) {
-		this.size = Randomizer.int(5, 10);
+	public function new(parent:Object, colour:Null<Int> = null, size:Null<Int> = null) {
+		this.size = size == null ? Randomizer.int(5, 10) : size;
 
 		var cirle = new Graphics(parent);
 		cirle.beginFill(colour == null ? Colours.BUOY : colour);
-		cirle.drawCircle(0, 0, size);
+		cirle.drawCircle(0, 0, this.size);
 		cirle.endFill();
 
 		this.texture = cirle;
@@ -47,8 +46,8 @@ class Buoy {
 		this.texture.visible = parentPos.distance(me) < 900 + this.size / 2;
 	}
 
-	public static function drop(parent, x, y) {
-		var buoy = new Buoy(parent);
+	public static function drop(parent, x, y, size:Null<Int> = null) {
+		var buoy = new Buoy(parent, null, size);
 		buoy.x = x;
 		buoy.y = y;
 
