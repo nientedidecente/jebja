@@ -1,5 +1,7 @@
 package jebja.entities.course;
 
+import differ.shapes.Shape;
+
 class Checkpoint {
 	var active:Bool;
 	var visited:Bool;
@@ -41,5 +43,9 @@ class Checkpoint {
 
 	public function wasVisited():Bool {
 		return this.visited;
+	}
+
+	public function getCollider():Null<Shape> {
+		return null;
 	}
 }

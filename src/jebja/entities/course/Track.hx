@@ -1,5 +1,7 @@
 package jebja.entities.course;
 
+import differ.Collision;
+import differ.shapes.Shape;
 import h2d.col.Point;
 import jebja.libs.Geom;
 import jebja.libs.Atlas;
@@ -21,6 +23,8 @@ class Track {
 	var indicator:Bitmap;
 	var distanceText:Text;
 
+	var checkpointer = 0;
+
 	public function new(background:Object, foreground:Object) {
 		this.background = background;
 		this.foreground = foreground;
@@ -35,12 +39,12 @@ class Track {
 		checkpoints.push(new GateCP(background, 1000, 1000));
 		checkpoints.push(new GateCP(background, -800, -800));
 
-		nextCheckpoint = checkpoints[0];
+		nextCheckpoint = checkpoints[checkpointer];
+		nextCheckpoint.activate();
 	}
 
 	public function update(player:Player) {
 		if (nextCheckpoint == null) {
-			trace("finished track");
 			return;
 		}
 
@@ -49,6 +53,12 @@ class Track {
 		// update indicator
 		updateStepIndicator(player);
 		// check if there are more checkpoints
+
+		if (nextCheckpoint.isActive() && playerCrossedCheckpoint(nextCheckpoint.getCollider(), player.collider)) {
+			nextCheckpoint.deActivate();
+			nextCheckpoint.flagAsVisited();
+			nextCheckpoint = getNextCheckpoint();
+		}
 	}
 
 	function updateStepIndicator(player:Player) {
@@ -71,5 +81,23 @@ class Track {
 		distanceText.x = pos.x - 20;
 		distanceText.y = pos.y - 20;
 		distanceText.visible = showIndicator;
+	}
+
+	function playerCrossedCheckpoint(checkpoint:Null<Shape>, player:Shape):Bool {
+		if (checkpoint == null) {
+			return false;
+		}
+		return Collision.shapeWithShape(checkpoint, player) != null;
+	}
+
+	function getNextCheckpoint():Null<Checkpoint> {
+		checkpointer++;
+
+		if (checkpointer >= checkpoints.length)
+			return null;
+
+		var next = checkpoints[checkpointer];
+		next.activate();
+		return next;
 	}
 }

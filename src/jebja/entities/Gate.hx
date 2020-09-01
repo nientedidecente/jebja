@@ -33,7 +33,7 @@ class Gate extends Object {
 		super(parent);
 		this.size = size;
 		initTexture();
-		collider = Polygon.rectangle(1000, 1000, 150, 1);
+		collider = Polygon.rectangle(1000, 1000, size, 1);
 		/*
 
 			indicator = new Bitmap(Atlas.instance.getRes('target').toTile().center(), parent);

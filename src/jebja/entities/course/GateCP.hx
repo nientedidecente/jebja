@@ -1,5 +1,6 @@
 package jebja.entities.course;
 
+import differ.shapes.Shape;
 import h2d.Object;
 
 class GateCP extends Checkpoint {
@@ -23,12 +24,15 @@ class GateCP extends Checkpoint {
 		return y;
 	}
 
-	public function new(parent:Object, x:Float, y:Float) {
+	public function new(parent:Object, x:Float, y:Float, size = 50) {
 		active = false;
 		visited = false;
 
-		gate = new Gate(parent, 10);
-		gate.x = x;
-		gate.y = y;
+		gate = new Gate(parent, size);
+		gate.forcePosition(x, y);
+	}
+
+	override function getCollider():Null<Shape> {
+		return gate.collider;
 	}
 }
