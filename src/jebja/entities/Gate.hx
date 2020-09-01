@@ -77,6 +77,6 @@ class Gate extends Object {
 
 	public function initTexture() {
 		var left = Buoy.drop(this, -50, 0, 10);
-		var right = Buoy.drop(this, 100, 0, 10);
+		var right = Buoy.drop(this, size + 50, 0, 10);
 	}
 }
