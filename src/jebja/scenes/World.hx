@@ -36,8 +36,6 @@ class World extends BaseScene {
 
 	var track:Track;
 
-	var gate:Gate;
-
 	var showInfo = true;
 	var speedInfo:Text;
 	var worldInfo:Text;
@@ -67,8 +65,7 @@ class World extends BaseScene {
 		homeBuoy.x = 0;
 		homeBuoy.y = 0;
 
-		// targetBuoy = TargetBuoy.generate(background);
-		targetBuoy = null;
+		targetBuoy = TargetBuoy.generate(background);
 
 		track = new Track(background, foreground);
 
@@ -81,15 +78,11 @@ class World extends BaseScene {
 		var tips = UiHelper.addTips(Strings.COMMANDS, this);
 		Timer.delay(function() {
 			tips.remove();
-		}, 6000);
+		}, 10000);
 
 		initTextIndicators();
 		triggerWindChange();
 		triggerWaves();
-
-		gate = new Gate(getBackground(), 100);
-		gate.forcePosition(200, 200);
-		gate.forceRotation(Math.PI / 2);
 	}
 
 	override function update(dt:Float) {
@@ -105,7 +98,7 @@ class World extends BaseScene {
 
 		track.update(player);
 
-		gate.update(player);
+		//gate.update(player);
 
 		if (targetBuoy != null) {
 			targetBuoy.update(player);
