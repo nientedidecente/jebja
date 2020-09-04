@@ -43,7 +43,11 @@ class Buoy {
 	public function update(player:Player) {
 		var parentPos = new Point(player.x, player.y);
 		var me = new Point(this.x, this.y);
-		this.texture.visible = parentPos.distance(me) < 900 + this.size / 2;
+		texture.visible = parentPos.distance(me) < 900 + this.size / 2;
+	}
+
+	public function destroy() {
+		texture.remove();
 	}
 
 	public static function drop(parent, x, y, size:Null<Int> = null) {

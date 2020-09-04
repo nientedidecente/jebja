@@ -72,7 +72,7 @@ class TargetBuoy extends Buoy {
 		distanceText.visible = showIndicator;
 	}
 
-	public function destroy() {
+	override public function destroy() {
 		indicator.remove();
 		collider.destroy();
 		halo.remove();

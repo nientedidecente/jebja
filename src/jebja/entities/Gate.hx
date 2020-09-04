@@ -1,5 +1,6 @@
 package jebja.entities;
 
+import h2d.Graphics;
 import jebja.libs.Randomizer;
 import differ.Collision;
 import differ.shapes.Polygon;
@@ -10,6 +11,9 @@ import h2d.Object;
 import hxd.Math;
 
 class Gate extends Object {
+	var buoys:Array<Buoy>;
+	var line:Graphics;
+
 	var size:Float;
 	var indicator:Bitmap;
 	var distanceText:Text;
@@ -34,49 +38,31 @@ class Gate extends Object {
 		this.size = size;
 		initTexture();
 		collider = Polygon.rectangle(1000, 1000, size, 1);
-		/*
-
-			indicator = new Bitmap(Atlas.instance.getRes('target').toTile().center(), parent);
-			indicator.scale(.5);
-
-			distanceText = new h2d.Text(hxd.res.DefaultFont.get(), parent);
-			distanceText.textColor = Colours.BUOY_LIGHT;
-			distanceText.textAlign = Align.Center;
-
-			collider = new Circle(1000, 1000, size * 2);
-		 */
 	}
 
 	public function update(player:Player) {
 		if (Collision.shapeWithShape(player.collider, collider) != null) {
 			trace('gate hit ${Randomizer.int(0, 10)}');
 		}
-		/*
-			var parentPos = new Point(player.x, player.y);
-			var me = new Point(this.x, this.y);
-				var distance = parentPos.distance(me);
-				var inView = distance < 900 + this.size / 2;
-					var pos = Geom.pointOnLine(player.x, player.y, x, y, distance, Math.min(300.0, distance / 2));
-
-					indicator.x = pos.x;
-					indicator.y = pos.y;
-					var showIndicator = pos.distance(me) > 180;
-					indicator.visible = showIndicator;
-					indicator.rotation = ((Math.PI / 2) + Math.atan2(y - pos.y, x - pos.x));
-					distanceText.text = '${std.Math.ceil(distance)}';
-					distanceText.x = pos.x - 20;
-					distanceText.y = pos.y - 20;
-					distanceText.visible = showIndicator;
-		 */
 	}
 
 	public function destroy() {
 		indicator.remove();
 		collider.destroy();
+		for (buoy in buoys) {
+			buoy.destroy();
+		}
+		line.remove();
 	}
 
 	public function initTexture() {
-		var left = Buoy.drop(this, -50, 0, 10);
-		var right = Buoy.drop(this, size + 50, 0, 10);
+		buoys = new Array<Buoy>();
+		buoys.push(Buoy.drop(this, -50, 0, 10));
+		buoys.push(Buoy.drop(this, size + 50, 0, 10));
+
+		line = new Graphics(this);
+		line.beginFill(0xffffff, .5);
+		line.drawRect(buoys[0].x + 10, buoys[0].y, size + 85, 1);
+		line.endFill();
 	}
 }
