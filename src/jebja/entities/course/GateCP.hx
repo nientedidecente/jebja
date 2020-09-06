@@ -35,4 +35,9 @@ class GateCP extends Checkpoint {
 	override function getCollider():Null<Shape> {
 		return gate.collider;
 	}
+
+	override function onCrossing() {
+		super.onCrossing();
+		gate.toggleLine();
+	}
 }

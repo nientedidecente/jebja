@@ -37,6 +37,11 @@ class Checkpoint {
 		this.visited = true;
 	}
 
+	public function onCrossing() {
+		deActivate();
+		flagAsVisited();
+	}
+
 	public function isActive():Bool {
 		return this.active;
 	}
