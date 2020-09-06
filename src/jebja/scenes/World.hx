@@ -65,9 +65,12 @@ class World extends BaseScene {
 		homeBuoy.x = 0;
 		homeBuoy.y = 0;
 
-		targetBuoy = TargetBuoy.generate(background);
+		// targetBuoy = TargetBuoy.generate(background);
+		targetBuoy = null;
 
-		track = new Track(background, foreground);
+		track = new Track(background, foreground, function() {
+			trace("track finished");
+		});
 
 		wind = Wind.generate();
 		player = new Player(camera, background, wind);
@@ -98,7 +101,7 @@ class World extends BaseScene {
 
 		track.update(player);
 
-		//gate.update(player);
+		// gate.update(player);
 
 		if (targetBuoy != null) {
 			targetBuoy.update(player);

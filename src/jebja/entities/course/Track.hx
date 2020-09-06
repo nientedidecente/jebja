@@ -13,6 +13,9 @@ import h2d.Bitmap;
 class Track {
 	static final INDICATOR_RENDER_DISTANCE = 50;
 
+	var finished = false;
+	var onFinished:Void->Void;
+
 	var background:Object;
 	var foreground:Object;
 	var checkpoints:Array<Checkpoint>;
@@ -25,9 +28,11 @@ class Track {
 
 	var checkpointer = 0;
 
-	public function new(background:Object, foreground:Object) {
+	public function new(background:Object, foreground:Object, onFinished:Void->Void) {
+		this.onFinished = onFinished;
 		this.background = background;
 		this.foreground = foreground;
+
 		indicator = new Bitmap(Atlas.instance.getRes('target').toTile().center(), foreground);
 		indicator.scale(.5);
 
@@ -37,7 +42,10 @@ class Track {
 
 		checkpoints = new Array<Checkpoint>();
 		checkpoints.push(new GateCP(background, 1000, 1000));
-		checkpoints.push(new GateCP(background, -800, -800));
+		checkpoints.push(new GateCP(background, -1800, -1800));
+		checkpoints.push(new GateCP(background, 1500, 1500));
+		checkpoints.push(new GateCP(background, 3800, 1000));
+		checkpoints.push(new GateCP(background, -2500, 1000));
 
 		nextCheckpoint = checkpoints[checkpointer];
 		nextCheckpoint.activate();
@@ -55,14 +63,13 @@ class Track {
 		// check if there are more checkpoints
 
 		if (nextCheckpoint.isActive() && playerCrossedCheckpoint(nextCheckpoint.getCollider(), player.collider)) {
-			nextCheckpoint.deActivate();
-			nextCheckpoint.flagAsVisited();
+			nextCheckpoint.onCrossing();
 			nextCheckpoint = getNextCheckpoint();
 		}
 	}
 
 	function updateStepIndicator(player:Player) {
-		if (nextCheckpoint == null)
+		if (finished || nextCheckpoint == null)
 			return;
 
 		var x = nextCheckpoint.x;
@@ -93,8 +100,11 @@ class Track {
 	function getNextCheckpoint():Null<Checkpoint> {
 		checkpointer++;
 
-		if (checkpointer >= checkpoints.length)
+		if (checkpointer >= checkpoints.length) {
+			finished = false;
+			onFinished();
 			return null;
+		}
 
 		var next = checkpoints[checkpointer];
 		next.activate();
