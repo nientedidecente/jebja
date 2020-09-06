@@ -55,6 +55,10 @@ class Gate extends Object {
 		line.remove();
 	}
 
+	public function toggleLine() {
+		line.visible = !line.visible;
+	}
+
 	public function initTexture() {
 		buoys = new Array<Buoy>();
 		buoys.push(Buoy.drop(this, -50, 0, 10));
@@ -62,7 +66,7 @@ class Gate extends Object {
 
 		line = new Graphics(this);
 		line.beginFill(0xffffff, .5);
-		line.drawRect(buoys[0].x + 10, buoys[0].y, size + 85, 1);
+		line.drawRect(buoys[0].x + 10, buoys[0].y, size + 83, 1);
 		line.endFill();
 	}
 }
