@@ -60,13 +60,16 @@ class Gate extends Object {
 	}
 
 	public function initTexture() {
+		var buoySize = 10;
+		var divergence = 50;
 		buoys = new Array<Buoy>();
-		buoys.push(Buoy.drop(this, -50, 0, 10));
-		buoys.push(Buoy.drop(this, size + 50, 0, 10));
+		buoys.push(Buoy.drop(this, -divergence, 0, buoySize));
+		buoys.push(Buoy.drop(this, size + divergence, 0, buoySize));
 
+		var lineSize = size + (2 * divergence) - (2 * buoySize);
 		line = new Graphics(this);
 		line.beginFill(0xffffff, .5);
-		line.drawRect(buoys[0].x + 10, buoys[0].y, size + 83, 1);
+		line.drawRect(buoys[0].x + 10, buoys[0].y, lineSize, 1);
 		line.endFill();
 	}
 }

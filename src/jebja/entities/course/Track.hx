@@ -41,6 +41,7 @@ class Track {
 		distanceText.textAlign = Align.Center;
 
 		checkpoints = new Array<Checkpoint>();
+		checkpoints.push(new GateCP(background, 100, 100));
 		checkpoints.push(new GateCP(background, 1000, 1000));
 		checkpoints.push(new GateCP(background, -1800, -1800));
 		checkpoints.push(new GateCP(background, 1500, 1500));
