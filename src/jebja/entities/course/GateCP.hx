@@ -37,10 +37,6 @@ class GateCP extends Checkpoint {
 		return gate.collider;
 	}
 
-	override function onCrossing() {
-		super.onCrossing();
-	}
-
 	override function onActivation() {
 		gate.setLineVisibility(true);
 	}
