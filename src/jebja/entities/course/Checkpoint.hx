@@ -27,10 +27,12 @@ class Checkpoint {
 
 	public function activate() {
 		this.active = true;
+		onActivation();
 	}
 
 	public function deActivate() {
 		this.active = false;
+		onDeActivation();
 	}
 
 	public function flagAsVisited() {
@@ -41,6 +43,10 @@ class Checkpoint {
 		deActivate();
 		flagAsVisited();
 	}
+
+	public function onActivation() {}
+
+	public function onDeActivation() {}
 
 	public function isActive():Bool {
 		return this.active;

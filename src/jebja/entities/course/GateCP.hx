@@ -30,6 +30,7 @@ class GateCP extends Checkpoint {
 
 		gate = new Gate(parent, size);
 		gate.forcePosition(x, y);
+		gate.setLineVisibility(false);
 	}
 
 	override function getCollider():Null<Shape> {
@@ -38,6 +39,13 @@ class GateCP extends Checkpoint {
 
 	override function onCrossing() {
 		super.onCrossing();
-		gate.toggleLine();
+	}
+
+	override function onActivation() {
+		gate.setLineVisibility(true);
+	}
+
+	override function onDeActivation() {
+		gate.setLineVisibility(false);
 	}
 }

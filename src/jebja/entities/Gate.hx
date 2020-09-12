@@ -55,8 +55,12 @@ class Gate extends Object {
 		line.remove();
 	}
 
+	public function setLineVisibility(visibility:Bool) {
+		line.visible = visibility;
+	}
+
 	public function toggleLine() {
-		line.visible = !line.visible;
+		line.visible =  !line.visible;
 	}
 
 	public function initTexture() {
