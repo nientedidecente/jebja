@@ -17,6 +17,7 @@ class Track {
 	var finished = false;
 	var onStart:Void->Void;
 	var onFinished:Void->Void;
+	var onCheckpoint:(String, String) -> Void;
 
 	var background:Object;
 	var foreground:Object;
@@ -30,11 +31,14 @@ class Track {
 
 	var checkpointer = 0;
 
-	public function new(background:Object, foreground:Object, events:Array<Void->Void>) {
-		this.onStart = events[0];
-		this.onFinished = events[1];
+	public function new(background:Object, foreground:Object, onStart:Null<Void->Void> = null, onFinished:Null<Void->Void> = null,
+			onCheckpoint:Null<(String, String) -> Void> = null) {
 		this.background = background;
 		this.foreground = foreground;
+
+		this.onStart = onStart;
+		this.onFinished = onFinished;
+		this.onCheckpoint = onCheckpoint;
 
 		indicator = new Bitmap(Atlas.instance.getRes('target').toTile().center(), foreground);
 		indicator.scale(.5);
@@ -67,16 +71,21 @@ class Track {
 		// check if there are more checkpoints
 
 		if (nextCheckpoint.isActive() && playerCrossedCheckpoint(nextCheckpoint.getCollider(), player.collider)) {
-			if (!started) {
-				started = true;
-				onStart();
-			}
 			nextCheckpoint.onCrossing();
 			nextCheckpoint = getNextCheckpoint();
-			
+
 			if (nextCheckpoint == null) {
 				finished = false;
 				onFinished();
+			}
+
+			if (started && !finished) {
+				onCheckpoint('${checkpointer - 1}', '${checkpoints.length - 1}');
+			}
+
+			if (!started) {
+				started = true;
+				onStart();
 			}
 		}
 	}

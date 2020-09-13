@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import h2d.col.Point;
 import jebja.entities.course.Track;
 import jebja.entities.Waves;
 import jebja.entities.Dashboard;
@@ -28,6 +29,7 @@ class World extends BaseScene {
 	var gameOver = false;
 
 	var track:Track;
+	var startingTime:Float;
 
 	var showInfo = true;
 	var speedInfo:Text;
@@ -54,14 +56,16 @@ class World extends BaseScene {
 		homeBuoy.x = 0;
 		homeBuoy.y = 0;
 
-		track = new Track(background, foreground, [
-			function() {
-				trace("on Start");
-			},
-			function() {
-				trace("on Finished");
-			}
-		]);
+		track = new Track(background, foreground, function() {
+			this.startingTime = haxe.Timer.stamp();
+			UiHelper.addTips("RACE STARTED", this, 4000, new Point(-100, 0));
+		}, function() {
+			var elapsed = Std.int((haxe.Timer.stamp() - this.startingTime) * 1000) / 1000;
+			UiHelper.addTips('RACE FINISHED\ntime: ${elapsed} sec', this, 4000, new Point(-100, 0));
+		}, function(checkpoint, total) {
+			var elapsed = Std.int((haxe.Timer.stamp() - this.startingTime) * 1000) / 1000;
+			UiHelper.addTips('${checkpoint} / ${total}\ntime: ${elapsed} sec', this, 4000, new Point(-100, 0));
+		});
 
 		wind = Wind.generate();
 		player = new Player(camera, background, wind);
@@ -69,10 +73,7 @@ class World extends BaseScene {
 		player.x = Player.SIZE;
 		player.y = 0;
 
-		var tips = UiHelper.addTips(Strings.COMMANDS, this);
-		Timer.delay(function() {
-			tips.remove();
-		}, 10000);
+		UiHelper.addTips(Strings.COMMANDS, this);
 
 		initTextIndicators();
 		triggerWindChange();
