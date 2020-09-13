@@ -1,5 +1,7 @@
 package ui;
 
+import haxe.Timer;
+import h2d.col.Point;
 import h2d.Bitmap;
 import h2d.Scene;
 import h2d.Text;
@@ -35,12 +37,17 @@ class UiHelper {
 		return t;
 	}
 
-	public static function addTips(label:String, scene:Scene) {
+	public static function addTips(label:String, scene:Scene, timeout:Int = 10000, offset:Null<Point> = null) {
+		offset = offset == null ? new Point(-100, -300) : offset;
 		var t = new h2d.Text(hxd.res.DefaultFont.get(), scene);
 		t.scale(2);
 		t.text = label;
-		t.x = scene.width * .5 - 100;
-		t.y = scene.height * .5 - 300;
+		t.x = scene.width * .5 + offset.x;
+		t.y = scene.height * .5 + offset.y;
+
+		Timer.delay(function() {
+			t.remove();
+		}, timeout);
 
 		return t;
 	}
