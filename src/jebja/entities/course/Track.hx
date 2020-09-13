@@ -13,7 +13,9 @@ import h2d.Bitmap;
 class Track {
 	static final INDICATOR_RENDER_DISTANCE = 50;
 
+	var started = false;
 	var finished = false;
+	var onStart:Void->Void;
 	var onFinished:Void->Void;
 
 	var background:Object;
@@ -28,8 +30,9 @@ class Track {
 
 	var checkpointer = 0;
 
-	public function new(background:Object, foreground:Object, onFinished:Void->Void) {
-		this.onFinished = onFinished;
+	public function new(background:Object, foreground:Object, events:Array<Void->Void>) {
+		this.onStart = events[0];
+		this.onFinished = events[1];
 		this.background = background;
 		this.foreground = foreground;
 
@@ -64,8 +67,17 @@ class Track {
 		// check if there are more checkpoints
 
 		if (nextCheckpoint.isActive() && playerCrossedCheckpoint(nextCheckpoint.getCollider(), player.collider)) {
+			if (!started) {
+				started = true;
+				onStart();
+			}
 			nextCheckpoint.onCrossing();
 			nextCheckpoint = getNextCheckpoint();
+			
+			if (nextCheckpoint == null) {
+				finished = false;
+				onFinished();
+			}
 		}
 	}
 
@@ -102,8 +114,6 @@ class Track {
 		checkpointer++;
 
 		if (checkpointer >= checkpoints.length) {
-			finished = false;
-			onFinished();
 			return null;
 		}
 

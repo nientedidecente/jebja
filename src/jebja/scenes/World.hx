@@ -30,8 +30,6 @@ class World extends BaseScene {
 	var layers:Array<Object>;
 
 	var homeBuoy:Buoy;
-	var visitedBuoys:Array<Buoy>;
-	var targetBuoy:Null<TargetBuoy>;
 	var gameOver = false;
 
 	var track:Track;
@@ -43,14 +41,10 @@ class World extends BaseScene {
 
 	var dashboard:Dashboard;
 
-	var screen:Point;
-
 	override function init() {
 		super.init();
-		screen = new Point(this.height, this.width);
 		gameOver = false;
 		layers = new Array<Object>();
-		visitedBuoys = new Array<Buoy>();
 		UiHelper.addBackground(this, Colours.SEA);
 		var background = new Object(this);
 		layers.push(background);
@@ -65,12 +59,14 @@ class World extends BaseScene {
 		homeBuoy.x = 0;
 		homeBuoy.y = 0;
 
-		// targetBuoy = TargetBuoy.generate(background);
-		targetBuoy = null;
-
-		track = new Track(background, foreground, function() {
-			trace("track finished");
-		});
+		track = new Track(background, foreground, [
+			function() {
+				trace("on Start");
+			},
+			function() {
+				trace("on Finished");
+			}
+		]);
 
 		wind = Wind.generate();
 		player = new Player(camera, background, wind);
@@ -101,28 +97,11 @@ class World extends BaseScene {
 
 		track.update(player);
 
-		// gate.update(player);
-
-		if (targetBuoy != null) {
-			targetBuoy.update(player);
-
-			if (Collision.shapeWithShape(player.collider, targetBuoy.collider) != null) {
-				visitedBuoys.push(Buoy.drop(getBackground(), targetBuoy.x, targetBuoy.y));
-				targetBuoy.destroy();
-				targetBuoy = TargetBuoy.generate(getBackground());
-			}
-		}
-
-		for (buoy in visitedBuoys) {
-			buoy.update(player);
-		}
-
 		dashboard.update(player);
 
 		camera.viewX = player.x;
 		camera.viewY = player.y;
 		updateLayers(camera.x, camera.y);
-
 		updateInfo();
 
 		// Indicator
