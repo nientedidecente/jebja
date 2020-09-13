@@ -1,14 +1,9 @@
 package jebja.scenes;
 
 import jebja.entities.course.Track;
-import jebja.entities.Gate;
 import jebja.entities.Waves;
-import h3d.Vector;
 import jebja.entities.Dashboard;
 import h2d.Object;
-import h2d.col.Point;
-import differ.Collision;
-import jebja.entities.TargetBuoy;
 import h2d.Text;
 import jebja.libs.Geom;
 import jebja.libs.Randomizer;
