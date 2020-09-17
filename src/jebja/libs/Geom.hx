@@ -3,6 +3,8 @@ package jebja.libs;
 import h2d.col.Point;
 import hxd.Math;
 
+using Lambda;
+
 class Geom {
 	public static final ANGLE_SENSITIVITY = 3;
 	public static final ANGLE_45 = 45;
@@ -73,6 +75,31 @@ class Geom {
 	public static function getHeading(rotation:Float) {
 		var heading = Geom.directionAngle(rotation);
 		return heading < 0 ? (Geom.ANGLE_360 + heading) : heading;
+	}
+
+	public static function getHeadingDeg(degrees:Int) {
+		return degrees < 0 ? (Geom.ANGLE_360 + degrees) : degrees;
+	}
+
+	public static function getOptimalHeading(direction:Int, rotation:Float) {
+		var heading = getHeading(rotation);
+		var optimalHeadings = [
+			(direction - ANGLE_45) % ANGLE_360,
+			(direction + ANGLE_45) % ANGLE_360,
+			(direction + ANGLE_135) % ANGLE_360,
+			(direction - ANGLE_135) % ANGLE_360,
+		];
+
+		var relativeHeadings = [
+			Math.abs(heading - optimalHeadings[0]),
+			Math.abs(heading - optimalHeadings[1]),
+			Math.abs(heading - optimalHeadings[2]),
+			Math.abs(heading - optimalHeadings[3])
+		];
+
+		var element = relativeHeadings.fold(Math.min, relativeHeadings[0]);
+
+		return optimalHeadings[relativeHeadings.indexOf(element)];
 	}
 
 	public static function getCompass(direction:Int) {

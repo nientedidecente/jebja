@@ -54,7 +54,7 @@ class Track {
 		checkpoints.push(new GateCP(background, 1000, 1000, 30, Math.PI / 2));
 		checkpoints.push(new GateCP(background, -1800, -1800));
 		checkpoints.push(new GateCP(background, 1500, 1500, 20, Math.PI / 2));
-		checkpoints.push(new GateCP(background, 1800, 1000, 80, Math.PI / 4));
+		checkpoints.push(new GateCP(background, 1800, 1000, 80));
 		checkpoints.push(new GateCP(background, -500, 1000, 150, Math.PI / 2));
 
 		nextCheckpoint = checkpoints[checkpointer];

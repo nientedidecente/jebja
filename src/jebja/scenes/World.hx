@@ -1,5 +1,6 @@
 package jebja.scenes;
 
+import hxd.Math;
 import h2d.col.Point;
 import jebja.entities.course.Track;
 import jebja.entities.Waves;
@@ -58,13 +59,13 @@ class World extends BaseScene {
 
 		track = new Track(background, foreground, function() {
 			this.startingTime = haxe.Timer.stamp();
-			UiHelper.addTips("RACE STARTED", this, 4000, new Point(-100, 0));
+			UiHelper.addTips("RACE STARTED", this, 4000, new Point(-100, 100));
 		}, function() {
 			var elapsed = Std.int((haxe.Timer.stamp() - this.startingTime) * 1000) / 1000;
-			UiHelper.addTips('RACE FINISHED\ntime: ${elapsed} sec', this, 4000, new Point(-100, 0));
+			UiHelper.addTips('RACE FINISHED\ntime: ${elapsed} sec', this, 4000, new Point(-100, 100));
 		}, function(checkpoint, total) {
 			var elapsed = Std.int((haxe.Timer.stamp() - this.startingTime) * 1000) / 1000;
-			UiHelper.addTips('${checkpoint} / ${total}\ntime: ${elapsed} sec', this, 4000, new Point(-100, 0));
+			UiHelper.addTips('${checkpoint} / ${total}\ntime: ${elapsed} sec', this, 4000, new Point(-100, 100));
 		});
 
 		wind = Wind.generate();
@@ -124,8 +125,8 @@ class World extends BaseScene {
 		windInfo.visible = showInfo;
 		if (showInfo) {
 			windInfo.text = 'W: ${wind.getDirection()} ${Geom.toFixed(wind.intensity * Wind.KNOTS)} kn';
-			worldInfo.text = 'P: ${Geom.toFixed(player.x)}, ${Geom.toFixed(player.y)}';
-			speedInfo.text = 'H: ${Geom.getHeading(player.rotation)} (deg)\nV: ${Geom.toFixed(player.currentSpeed * wind.intensity * Wind.KNOTS)} kn';
+			worldInfo.text = 'P: ${Math.ceil(player.x)}, ${Math.ceil(player.y)}';
+			speedInfo.text = 'H: ${Geom.getHeading(player.rotation)}/${Geom.getOptimalHeading(wind.direction, player.rotation)} (deg)\nV: ${Geom.toFixed(player.currentSpeed * wind.intensity * Wind.KNOTS)} kn';
 		}
 	}
 
