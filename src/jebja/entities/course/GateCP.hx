@@ -24,12 +24,15 @@ class GateCP extends Checkpoint {
 		return y;
 	}
 
-	public function new(parent:Object, x:Float, y:Float, size = 50) {
+	public function new(parent:Object, x:Float, y:Float, size = 50, rotation:Null<Float> = null) {
 		active = false;
 		visited = false;
 
 		gate = new Gate(parent, size);
 		gate.forcePosition(x, y);
+		if (rotation != null) {
+			gate.forceRotation(rotation);
+		}
 		gate.setLineVisibility(false);
 	}
 
