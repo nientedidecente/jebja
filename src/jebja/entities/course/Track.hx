@@ -1,5 +1,6 @@
 package jebja.entities.course;
 
+import jebja.entities.course.BuoyCp.BuoyCP;
 import differ.Collision;
 import differ.shapes.Shape;
 import h2d.col.Point;
@@ -49,11 +50,12 @@ class Track {
 
 		checkpoints = new Array<Checkpoint>();
 		checkpoints.push(new GateCP(background, 100, 100));
+		checkpoints.push(new BuoyCP(background, 700, 180));
 		checkpoints.push(new GateCP(background, 1000, 1000, 30, Math.PI / 2));
 		checkpoints.push(new GateCP(background, -1800, -1800));
 		checkpoints.push(new GateCP(background, 1500, 1500, 20, Math.PI / 2));
-		checkpoints.push(new GateCP(background, 3800, 1000, 80, Math.PI / 4));
-		checkpoints.push(new GateCP(background, -2500, 1000, 150, Math.PI / 2));
+		checkpoints.push(new GateCP(background, 1800, 1000, 80, Math.PI / 4));
+		checkpoints.push(new GateCP(background, -500, 1000, 150, Math.PI / 2));
 
 		nextCheckpoint = checkpoints[checkpointer];
 		nextCheckpoint.activate();
@@ -75,7 +77,7 @@ class Track {
 			nextCheckpoint = getNextCheckpoint();
 
 			if (nextCheckpoint == null) {
-				finished = false;
+				finished = true;
 				onFinished();
 			}
 

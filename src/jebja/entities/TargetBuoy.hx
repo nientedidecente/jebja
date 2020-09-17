@@ -38,13 +38,6 @@ class TargetBuoy extends Buoy {
 
 	public function new(parent:Object, colour:Null<Int> = null) {
 		super(parent, Colours.BUOY_LIGHT);
-
-		indicator = new Bitmap(Atlas.instance.getRes('target').toTile().center(), parent);
-		indicator.scale(.5);
-
-		distanceText = new h2d.Text(hxd.res.DefaultFont.get(), parent);
-		distanceText.textColor = Colours.BUOY_LIGHT;
-		distanceText.textAlign = Align.Center;
 		halo = new Graphics(parent);
 		halo.beginFill(Colours.BUOY_LIGHT, .1);
 		halo.drawCircle(0, 0, size * 4);
@@ -53,23 +46,12 @@ class TargetBuoy extends Buoy {
 		collider = new Circle(1000, 1000, size * 2);
 	}
 
-	override public function update(player:Player) {
-		var parentPos = new Point(player.x, player.y);
-		var me = new Point(this.x, this.y);
-		var distance = parentPos.distance(me);
-		var inView = distance < 900 + this.size / 2;
-		texture.visible = inView;
-		var pos = Geom.pointOnLine(player.x, player.y, x, y, distance, Math.min(300.0, distance / 2));
+	public function showHalo() {
+		halo.visible = true;
+	}
 
-		indicator.x = pos.x;
-		indicator.y = pos.y;
-		var showIndicator = pos.distance(me) > 180;
-		indicator.visible = showIndicator;
-		indicator.rotation = ((Math.PI / 2) + Math.atan2(y - pos.y, x - pos.x));
-		distanceText.text = '${std.Math.ceil(distance)}';
-		distanceText.x = pos.x - 20;
-		distanceText.y = pos.y - 20;
-		distanceText.visible = showIndicator;
+	public function hideHalo() {
+		halo.visible = false;
 	}
 
 	override public function destroy() {
