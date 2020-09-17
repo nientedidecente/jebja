@@ -13,21 +13,21 @@ final class SailTypes {
 		if (type == SailTypes.STAYSAIL) {
 			return SailConfig.make({
 				// Stern, Bow, CloseWind, Across
-				maxSpeed: [2, 0, 2, 1.5],
+				maxSpeed: [2.5, 0, 2.5, 1.8],
 				windResistence: .3
 			});
 		}
 
 		if (type == SailTypes.SPINNAKER) {
 			return SailConfig.make({
-				maxSpeed: [3.5, 0, .5, .5],
+				maxSpeed: [4, 0, 1, 1],
 				windResistence: .4
 			});
 		}
 
 		return SailConfig.make({
-			maxSpeed: [.3, 0, 0, 0],
-			windResistence: .6
+			maxSpeed: [.3, 0, 0.2, 0.2],
+			windResistence: .2
 		});
 	}
 
