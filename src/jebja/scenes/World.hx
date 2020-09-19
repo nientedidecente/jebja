@@ -50,7 +50,7 @@ class World extends BaseScene {
 		var foreground = new Object(this);
 		layers.push(foreground);
 
-		dashboard = new Dashboard(foreground);
+		dashboard = new Dashboard(this);
 		dashboard.visible = false;
 
 		homeBuoy = new Buoy(background, Colours.BUOY_DARK);
@@ -93,8 +93,6 @@ class World extends BaseScene {
 		player.update(dt);
 
 		track.update(player);
-
-		dashboard.update(player);
 
 		camera.viewX = player.x;
 		camera.viewY = player.y;

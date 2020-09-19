@@ -1,11 +1,12 @@
 package jebja.entities;
 
+import hxd.Window;
 import h2d.Text;
 import h2d.Graphics;
 import h2d.Object;
 
 class Dashboard {
-	static final SIZE = {w: 500, h: 200};
+	static final SIZE = {w: 500, h: 600};
 
 	var parent:Object;
 
@@ -46,15 +47,18 @@ class Dashboard {
 		wrapper.endFill();
 		wrapper.visible = false;
 		this.texture = wrapper;
-		this.texture.tile = this.texture.tile.center();
 		var text = new Text(hxd.res.DefaultFont.get(), this.texture);
 		text.scale(2);
 		text.textColor = 0x000000;
 		text.text = "Dashboard";
+		this.x = 0;
+		this.y = Window.getInstance().height - SIZE.h;
 	}
-
-	public function update(player:Player) {
-		x = player.x - SIZE.w / 2;
-		y = player.y + SIZE.h;
-	}
+	/*
+		in case we want to attach it to player position
+		public function update(player:Player) {
+			x = player.x - SIZE.w / 2;
+			y = player.y + SIZE.h;
+		}
+	 */
 }
