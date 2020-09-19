@@ -1,5 +1,7 @@
 package jebja.entities;
 
+import jebja.entities.boats.sails.SailConfig;
+import jebja.entities.boats.sails.SailTypes;
 import jebja.entities.effects.Trace;
 import jebja.entities.effects.Wind;
 import h2d.Bitmap;
@@ -93,9 +95,9 @@ class Player extends Collidable {
 			this.toggleSail();
 		}
 
-		// opening spinnaker
+		// putting sails down
 		if (Key.isReleased(Key.DOWN)) {
-			this.setSail(SailTypes.SPINNAKER);
+			this.setSail(SailTypes.NONE);
 		}
 
 		// Indicator
@@ -165,7 +167,7 @@ class Player extends Collidable {
 	}
 
 	function toggleSail() {
-		var sail = (this.sail == SailTypes.NONE) ? SailTypes.STAYSAIL : SailTypes.NONE;
+		var sail = (this.sail == SailTypes.NONE) ? SailTypes.STAYSAIL : (this.sail == SailTypes.STAYSAIL ? SailTypes.SPINNAKER : SailTypes.STAYSAIL);
 		this.setSail(sail);
 	}
 

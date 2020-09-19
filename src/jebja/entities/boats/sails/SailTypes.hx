@@ -1,4 +1,4 @@
-package jebja.entities;
+package jebja.entities.boats.sails;
 
 import jebja.libs.Geom;
 
