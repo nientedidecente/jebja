@@ -1,4 +1,4 @@
-package jebja.entities;
+package jebja.entities.ui;
 
 import hxd.Window;
 import h2d.Text;

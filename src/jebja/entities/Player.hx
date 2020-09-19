@@ -1,5 +1,7 @@
 package jebja.entities;
 
+import jebja.entities.effects.Trace;
+import jebja.entities.effects.Wind;
 import h2d.Bitmap;
 import jebja.libs.Atlas;
 import jebja.libs.Geom;

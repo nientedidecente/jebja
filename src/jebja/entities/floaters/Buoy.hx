@@ -1,4 +1,4 @@
-package jebja.entities;
+package jebja.entities.floaters;
 
 import h2d.Graphics;
 import h2d.col.Point;

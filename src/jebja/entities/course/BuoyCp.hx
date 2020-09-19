@@ -1,5 +1,6 @@
 package jebja.entities.course;
 
+import jebja.entities.floaters.TargetBuoy;
 import differ.shapes.Shape;
 import h2d.Object;
 

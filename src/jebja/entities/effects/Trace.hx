@@ -1,4 +1,4 @@
-package jebja.entities;
+package jebja.entities.effects;
 
 import jebja.libs.Atlas;
 import h2d.col.Point;

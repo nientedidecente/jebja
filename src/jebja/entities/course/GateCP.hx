@@ -1,5 +1,6 @@
 package jebja.entities.course;
 
+import jebja.entities.floaters.Gate;
 import differ.shapes.Shape;
 import h2d.Object;
 
