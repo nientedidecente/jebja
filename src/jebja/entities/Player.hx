@@ -59,6 +59,10 @@ class Player extends Collidable {
 		return this;
 	}
 
+	public function getWind():Wind {
+		return wind;
+	}
+
 	public function updateIndicators() {
 		windIndicator.visible = showIndicators;
 

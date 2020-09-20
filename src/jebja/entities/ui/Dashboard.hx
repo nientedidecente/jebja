@@ -1,14 +1,27 @@
 package jebja.entities.ui;
 
+import haxe.display.Display.SignatureHelpParams;
+import h2d.Flow;
+import jebja.entities.effects.Wind;
+import jebja.entities.ui.dashboard.Info;
 import hxd.Window;
 import h2d.Text;
 import h2d.Graphics;
 import h2d.Object;
 
 class Dashboard {
-	static final SIZE = {w: 500, h: 600};
+	static final SIZE = {w: 800, h: 100};
 
 	var parent:Object;
+	var info:Null<Info>;
+
+	var position:Text;
+	var heading:Text;
+	var speed:Text;
+
+	var wrapper:Flow;
+	var right:Flow;
+	var left:Flow;
 
 	public var texture:Graphics;
 	public var x(get, set):Float;
@@ -40,25 +53,55 @@ class Dashboard {
 	}
 
 	public function new(parent:Object) {
+		var window = Window.getInstance();
 		this.parent = parent;
 		var wrapper = new Graphics(parent);
 		wrapper.beginFill(0xffffff);
-		wrapper.drawRect(0, 0, SIZE.w, SIZE.h);
+		wrapper.drawRect(0, 0, window.width / 2, SIZE.h);
 		wrapper.endFill();
 		wrapper.visible = false;
-		this.texture = wrapper;
-		var text = new Text(hxd.res.DefaultFont.get(), this.texture);
-		text.scale(2);
-		text.textColor = 0x000000;
-		text.text = "Dashboard";
-		this.x = 0;
-		this.y = Window.getInstance().height - SIZE.h;
+		texture = wrapper;
+
+		initFlow(window.width);
+		heading = Dashboard.addText(left);
+		heading.text = 'heading: ';
+
+		position = Dashboard.addText(left);
+		position.text = 'position: ';
+
+		speed = Dashboard.addText(right);
+		speed.text = 'speed: ';
+
+		this.x = window.width / 4;
+		this.y = window.height - SIZE.h;
 	}
-	/*
-		in case we want to attach it to player position
-		public function update(player:Player) {
-			x = player.x - SIZE.w / 2;
-			y = player.y + SIZE.h;
-		}
-	 */
+
+	function initFlow(width:Int) {
+		wrapper = new h2d.Flow(texture);
+		wrapper.layout = FlowLayout.Horizontal;
+		wrapper.maxWidth = Math.ceil(width / 2);
+		wrapper.maxHeight = SIZE.h;
+		wrapper.horizontalAlign = FlowAlign.Left;
+		wrapper.verticalAlign = FlowAlign.Top;
+
+		left = new h2d.Flow(wrapper);
+		left.layout = FlowLayout.Vertical;
+		left.minWidth = Math.ceil(wrapper.maxWidth / 2);
+
+		right = new h2d.Flow(wrapper);
+		right.layout = FlowLayout.Vertical;
+		right.minWidth = Math.ceil(wrapper.maxWidth / 2);
+	}
+
+	public function update(player:Player) {
+		info = new Info(player);
+	}
+
+	public static function addText(texture:Object):Text {
+		var textBox = new Text(hxd.res.DefaultFont.get(), texture);
+		textBox.text = '';
+		textBox.textColor = 0x000000;
+		textBox.scale(2);
+		return textBox;
+	}
 }
