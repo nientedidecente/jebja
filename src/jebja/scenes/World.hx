@@ -91,7 +91,7 @@ class World extends BaseScene {
 		}
 
 		player.update(dt);
-
+		dashboard.update(player);
 		track.update(player);
 
 		camera.viewX = player.x;
