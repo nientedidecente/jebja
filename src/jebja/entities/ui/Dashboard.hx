@@ -1,11 +1,11 @@
 package jebja.entities.ui;
 
 import h2d.Flow;
-import jebja.entities.ui.dashboard.Info;
 import hxd.Window;
-import h2d.Text;
 import h2d.Graphics;
 import h2d.Object;
+import jebja.entities.ui.dashboard.Info;
+import jebja.entities.ui.dashboard.ValueLabel;
 
 class Labels {
 	public static final HEADING = 'heading: ';
@@ -19,9 +19,9 @@ class Dashboard {
 	var parent:Object;
 	var info:Null<Info>;
 
-	var position:Text;
-	var heading:Text;
-	var speed:Text;
+	var position:ValueLabel;
+	var heading:ValueLabel;
+	var speed:ValueLabel;
 
 	var wrapper:Flow;
 	var right:Flow;
@@ -67,14 +67,14 @@ class Dashboard {
 		texture = wrapper;
 
 		initFlow(window.width);
-		heading = Dashboard.addText(left);
-		heading.text = Labels.HEADING;
+		heading = new ValueLabel(left);
+		heading.label.text = Labels.HEADING;
 
-		position = Dashboard.addText(left);
-		position.text = Labels.POSITION;
+		position = new ValueLabel(left);
+		position.label.text = Labels.POSITION;
 
-		speed = Dashboard.addText(right);
-		speed.text = Labels.SPEED;
+		speed = new ValueLabel(right);
+		speed.label.text = Labels.SPEED;
 
 		this.x = window.width / 4;
 		this.y = window.height - SIZE.h;
@@ -108,16 +108,8 @@ class Dashboard {
 
 		info = new Info(player);
 
-		heading.text = '${Labels.HEADING} ${info.heading}';
-		position.text = '${Labels.POSITION} ${info.position}';
-		speed.text = '${Labels.SPEED} ${info.speed}';
-	}
-
-	public static function addText(texture:Object):Text {
-		var textBox = new Text(hxd.res.DefaultFont.get(), texture);
-		textBox.text = '';
-		textBox.textColor = 0xffffff;
-		textBox.scale(2);
-		return textBox;
+		heading.value.text = '${info.heading}';
+		position.value.text = '${info.position}';
+		speed.value.text = '${info.speed}';
 	}
 }
