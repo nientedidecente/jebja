@@ -1,5 +1,6 @@
 package jebja.entities.ui;
 
+import hxd.Math;
 import h2d.Flow;
 import hxd.Window;
 import h2d.Graphics;
@@ -76,7 +77,7 @@ class Dashboard {
 		speed = new ValueLabel(right);
 		speed.label.text = Labels.SPEED;
 
-		this.x = window.width / 4;
+		this.x = 0;//window.width / 4;
 		this.y = window.height - SIZE.h;
 	}
 
@@ -108,8 +109,22 @@ class Dashboard {
 
 		info = new Info(player);
 
-		heading.value.text = '${info.heading}';
+		heading.value.text = '${info.heading} / ${info.optimalHeading} deg';
+		heading.value.textColor = getHeadingColour(info);
 		position.value.text = '${info.position}';
-		speed.value.text = '${info.speed}';
+		speed.value.text = '${info.speed} Kn';
+	}
+
+	function getHeadingColour(info:Info):Int {
+		var diff = Math.abs(info.optimalHeading - info.heading);
+		if (diff < 3) {
+			return 0x00ff00;
+		}
+
+		if (diff < 30) {
+			return 0xffffff;
+		}
+
+		return 0xff0000;
 	}
 }

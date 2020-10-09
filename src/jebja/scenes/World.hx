@@ -1,6 +1,5 @@
 package jebja.scenes;
 
-import hxd.Math;
 import h2d.col.Point;
 import jebja.entities.course.Track;
 import jebja.entities.effects.Waves;
@@ -33,8 +32,6 @@ class World extends BaseScene {
 	var startingTime:Float;
 
 	var showInfo = true;
-	var speedInfo:Text;
-	var worldInfo:Text;
 	var windInfo:Text;
 
 	var dashboard:Dashboard;
@@ -118,13 +115,9 @@ class World extends BaseScene {
 	}
 
 	function updateInfo() {
-		speedInfo.visible = showInfo;
-		worldInfo.visible = showInfo;
 		windInfo.visible = showInfo;
 		if (showInfo) {
 			windInfo.text = 'W: ${wind.getDirection()} ${Geom.toFixed(wind.intensity * Wind.KNOTS)} kn';
-			worldInfo.text = 'P: ${Math.ceil(player.x)}, ${Math.ceil(player.y)}';
-			speedInfo.text = 'H: ${Geom.getHeading(player.rotation)}/${Geom.getOptimalHeading(wind.direction, player.rotation)} (deg)\nV: ${Geom.toFixed(player.currentSpeed * wind.intensity * Wind.KNOTS)} kn';
 		}
 	}
 
@@ -170,15 +163,9 @@ class World extends BaseScene {
 	}
 
 	function initTextIndicators() {
-		speedInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
 		windInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
-		worldInfo = new Text(hxd.Res.font.toSdfFont(null, 3), this);
 		windInfo.x = 5;
-		worldInfo.x = 5;
 		windInfo.y = 0;
-		worldInfo.y = 30;
-		speedInfo.x = 5;
-		speedInfo.y = this.height - 70;
 	}
 
 	function getBackground() {
